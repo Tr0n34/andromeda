@@ -2,7 +2,7 @@ package fr.andromeda.sport.services.impl;
 
 import fr.andromeda.sport.objects.dto.RowDataDTO;
 import fr.andromeda.sport.objects.inputs.RowDataInput;
-import fr.andromeda.sport.services.RowaDataService;
+import fr.andromeda.sport.services.RowDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RowDataServiceImpl implements RowaDataService {
+public class RowDataServiceImpl implements RowDataService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RowaDataService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RowDataService.class);
     private static Long DEFAULT_ID = 0L;
 
     @Override

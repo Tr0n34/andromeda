@@ -1,26 +1,30 @@
 package fr.andromeda.sport.services;
 
+import fr.andromeda.sport.configurations.GraphQLConfiguration;
 import fr.andromeda.sport.controllers.RawDataController;
 import fr.andromeda.sport.objects.dto.RowDataDTO;
 import fr.andromeda.sport.objects.inputs.RowDataInput;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @GraphQlTest(RawDataController.class)
+@Import(GraphQLConfiguration.class)
 public class RawDataControllerTest {
 
     @Autowired
     private GraphQlTester graphQlTester;
 
     @MockitoBean
-    private RowaDataService rowaDataService;
+    private RowDataService rowDataService;
 
     @Test
     void testRowDataByCriteria() {
@@ -41,7 +45,7 @@ public class RawDataControllerTest {
         dto.setHeartRateBpm(80);
         dto.setElapsedTimeS(30.5f);
 
-        when(rowaDataService.search(input)).thenReturn(List.of(dto));
+        when(rowDataService.search(any(RowDataInput.class))).thenReturn(List.of(dto));
 
         graphQlTester
                 .document("""

@@ -5,7 +5,7 @@ import fr.andromeda.sport.objects.inputs.RowDataInput;
 
 import java.util.List;
 
-public interface RowaDataService {
+public interface RowDataService {
 
     Long create(RowDataDTO rowDataDTO);
 

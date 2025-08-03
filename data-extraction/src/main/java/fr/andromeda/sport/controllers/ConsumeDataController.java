@@ -2,7 +2,7 @@ package fr.andromeda.sport.controllers;
 
 
 import fr.andromeda.sport.objects.dto.RowDataDTO;
-import fr.andromeda.sport.services.RowaDataService;
+import fr.andromeda.sport.services.RowDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +19,18 @@ public class ConsumeDataController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsumeDataController.class);
 
-    private final RowaDataService rowaDataService;
+    private final RowDataService rowDataService;
 
     @Autowired
-    public ConsumeDataController(RowaDataService rowaDataService) {
-        this.rowaDataService = rowaDataService;
+    public ConsumeDataController(RowDataService rowDataService) {
+        this.rowDataService = rowDataService;
     }
 
 
     @PostMapping("/data")
     public ResponseEntity<Void> receiveData(@RequestBody RowDataDTO data) {
         logger.debug("recieve data : {}", data.toString());
-        Long id = rowaDataService.create(data);
+        Long id = rowDataService.create(data);
         URI location = URI.create("/api/v1/data/" + id);
         return ResponseEntity.created(location).build();
     }
@@ -42,13 +42,13 @@ public class ConsumeDataController {
                 .fromCurrentRequest()
                 .build()
                 .toUri();
-        datas.forEach(rowaDataService::create);
+        datas.forEach(rowDataService::create);
         return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("/data/{id}")
     public ResponseEntity<Void> deleteData(@PathVariable Long id) {
-        rowaDataService.delete(id);
+        rowDataService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

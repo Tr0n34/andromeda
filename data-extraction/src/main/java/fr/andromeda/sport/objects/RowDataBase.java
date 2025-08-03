@@ -1,7 +1,5 @@
 package fr.andromeda.sport.objects;
 
-import java.time.LocalDateTime;
-
 public class RowDataBase {
 
     private Long id;
