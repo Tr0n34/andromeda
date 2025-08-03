@@ -1,0 +1,26 @@
+type Query {
+    rowDataByCriteria(criteria: RowDataInput): [RowData]
+}
+
+scalar DateTime
+
+input RowDataInput {
+    cadenceSpm: Int
+    strokeCount: Int
+    powerW: Int
+    caloriesKcal: Int
+    heartRateBpm: Int
+    elapsedTimeS: Float
+}
+
+type RowData {
+    id: ID!
+    cadenceSpm: Int
+    strokeCount: Int
+    powerW: Int
+    caloriesKcal: Int
+    heartRateBpm: Int
+    elapsedTimeS: Float
+    startDate: DateTime
+    stopDate: DateTime
+}
