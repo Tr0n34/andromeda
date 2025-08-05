@@ -2,8 +2,8 @@ package fr.andromeda.sport.services;
 
 import fr.andromeda.sport.configurations.GraphQLConfiguration;
 import fr.andromeda.sport.controllers.RawDataController;
-import fr.andromeda.sport.objects.dto.RowDataDTO;
-import fr.andromeda.sport.objects.inputs.RowDataInput;
+import fr.andromeda.sport.objects.dto.RawDataDTO;
+import fr.andromeda.sport.objects.inputs.RawDataInput;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
@@ -24,12 +24,12 @@ public class RawDataControllerTest {
     private GraphQlTester graphQlTester;
 
     @MockitoBean
-    private RowDataService rowDataService;
+    private RawDataService rawDataService;
 
     @Test
     void testRowDataByCriteria() {
 
-        RowDataInput input = new RowDataInput();
+        RawDataInput input = new RawDataInput();
         input.setCadenceSpm(24);
         input.setPowerW(100);
         input.setStrokeCount(10);
@@ -37,7 +37,7 @@ public class RawDataControllerTest {
         input.setHeartRateBpm(80);
         input.setElapsedTimeS(30.5f);
 
-        RowDataDTO dto = new RowDataDTO();
+        RawDataDTO dto = new RawDataDTO();
         dto.setCadenceSpm(24);
         dto.setPowerW(100);
         dto.setStrokeCount(10);
@@ -45,7 +45,7 @@ public class RawDataControllerTest {
         dto.setHeartRateBpm(80);
         dto.setElapsedTimeS(30.5f);
 
-        when(rowDataService.search(any(RowDataInput.class))).thenReturn(List.of(dto));
+        when(rawDataService.search(any(RawDataInput.class))).thenReturn(List.of(dto));
 
         graphQlTester
                 .document("""

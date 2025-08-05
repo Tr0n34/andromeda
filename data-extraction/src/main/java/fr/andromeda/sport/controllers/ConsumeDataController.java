@@ -1,8 +1,8 @@
 package fr.andromeda.sport.controllers;
 
 
-import fr.andromeda.sport.objects.dto.RowDataDTO;
-import fr.andromeda.sport.services.RowDataService;
+import fr.andromeda.sport.objects.dto.RawDataDTO;
+import fr.andromeda.sport.services.RawDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,36 +19,36 @@ public class ConsumeDataController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsumeDataController.class);
 
-    private final RowDataService rowDataService;
+    private final RawDataService rawDataService;
 
     @Autowired
-    public ConsumeDataController(RowDataService rowDataService) {
-        this.rowDataService = rowDataService;
+    public ConsumeDataController(RawDataService rawDataService) {
+        this.rawDataService = rawDataService;
     }
 
 
     @PostMapping("/data")
-    public ResponseEntity<Void> receiveData(@RequestBody RowDataDTO data) {
+    public ResponseEntity<Void> receiveData(@RequestBody RawDataDTO data) {
         logger.debug("received data : {}", data);
-        Long id = rowDataService.create(data);
+        Long id = rawDataService.create(data);
         URI location = URI.create(String.format("/api/v1/data/%d", id));
         return ResponseEntity.created(location).build();
     }
 
     @PostMapping("/datas")
-    public ResponseEntity<Void> receiveDataBatch(@RequestBody List<RowDataDTO> datas) {
+    public ResponseEntity<Void> receiveDataBatch(@RequestBody List<RawDataDTO> datas) {
         datas.forEach((data) -> logger.debug("{}", data));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .build()
                 .toUri();
-        datas.forEach(rowDataService::create);
+        datas.forEach(rawDataService::create);
         return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("/data/{id}")
     public ResponseEntity<Void> deleteData(@PathVariable Long id) {
-        rowDataService.delete(id);
+        rawDataService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,7 +1,7 @@
 package fr.andromeda.sport.controllers;
 
 import fr.andromeda.sport.objects.dto.TrainingDTO;
-import fr.andromeda.sport.services.RowDataService;
+import fr.andromeda.sport.services.RawDataService;
 import fr.andromeda.sport.services.TrainingService;
 import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
@@ -23,12 +23,12 @@ public class TrainingController {
     private static final Logger logger = LoggerFactory.getLogger(TrainingController.class);
 
     private TrainingService trainingService;
-    private RowDataService rowDataService;
+    private RawDataService rawDataService;
 
     @Autowired
-    public TrainingController(TrainingService trainingService, RowDataService rowDataService) {
+    public TrainingController(TrainingService trainingService, RawDataService rawDataService) {
         this.trainingService = trainingService;
-        this.rowDataService = rowDataService;
+        this.rawDataService = rawDataService;
     }
 
     @PostMapping(path = "/training")
