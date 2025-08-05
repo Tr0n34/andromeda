@@ -1,10 +1,14 @@
 package fr.andromeda.sport.services.impl;
 
+import fr.andromeda.sport.mappers.RowDataMapper;
+import fr.andromeda.sport.objects.RowData;
 import fr.andromeda.sport.objects.dto.RowDataDTO;
 import fr.andromeda.sport.objects.inputs.RowDataInput;
+import fr.andromeda.sport.repositories.RowDataRepository;
 import fr.andromeda.sport.services.RowDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +16,20 @@ import java.util.List;
 @Service
 public class RowDataServiceImpl implements RowDataService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RowDataService.class);
-    private static Long DEFAULT_ID = 0L;
+    private static final Logger logger = LoggerFactory.getLogger(RowDataServiceImpl.class);
+
+    private RowDataRepository rowDataRepository;
+    private RowDataMapper rowDataMapper;
+
+    @Autowired
+    public RowDataServiceImpl(RowDataRepository rowDataRepository, RowDataMapper rowDataMapper) {
+        this.rowDataRepository = rowDataRepository;
+        this.rowDataMapper = rowDataMapper;
+    }
 
     @Override
     public Long create(RowDataDTO rowDataDTO) {
-        DEFAULT_ID = DEFAULT_ID + 1;
-        return DEFAULT_ID;
+        rowDataRepository.save(rowDataMapper.toEntity(rowDataDTO));
     }
 
     @Override

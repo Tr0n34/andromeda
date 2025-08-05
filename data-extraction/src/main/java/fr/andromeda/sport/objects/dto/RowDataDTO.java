@@ -1,7 +1,7 @@
 package fr.andromeda.sport.objects.dto;
 
-import fr.andromeda.sport.objects.RowDataBase;
+import fr.andromeda.sport.objects.RowData;
 
-public class RowDataDTO extends RowDataBase {
+public class RowDataDTO extends RowData {
 
 }

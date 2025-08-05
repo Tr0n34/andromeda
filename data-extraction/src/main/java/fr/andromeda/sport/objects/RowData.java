@@ -1,13 +1,9 @@
-package fr.andromeda.sport.objects.entities;
+package fr.andromeda.sport.objects;
 
-import com.influxdb.annotations.Column;
-import com.influxdb.annotations.Measurement;
-
-@Measurement(name="row_data")
 public class RowData {
 
-    @Column(tag = true)
     private Long id;
+    private String deviceId;
     private int cadenceSpm;
     private int strokeCount;
     private int powerW;
@@ -21,6 +17,14 @@ public class RowData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public int getCaloriesKcal() {
@@ -71,5 +75,16 @@ public class RowData {
         this.elapsedTimeS = elapsedTimeS;
     }
 
-
+    @Override
+    public String toString() {
+        return "RowDataDTO{" +
+                ", cadenceSpm=" + cadenceSpm +
+                ", strokeCount=" + strokeCount +
+                ", powerW=" + powerW +
+                ", caloriesKcal=" + caloriesKcal +
+                ", heartRateBpm=" + heartRateBpm +
+                ", elapsedTimeS=" + elapsedTimeS +
+                '}';
+    }
+    
 }

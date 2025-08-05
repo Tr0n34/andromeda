@@ -29,15 +29,15 @@ public class ConsumeDataController {
 
     @PostMapping("/data")
     public ResponseEntity<Void> receiveData(@RequestBody RowDataDTO data) {
-        logger.debug("recieve data : {}", data.toString());
+        logger.debug("received data : {}", data);
         Long id = rowDataService.create(data);
-        URI location = URI.create("/api/v1/data/" + id);
+        URI location = URI.create(String.format("/api/v1/data/%d", id));
         return ResponseEntity.created(location).build();
     }
 
     @PostMapping("/datas")
     public ResponseEntity<Void> receiveDataBatch(@RequestBody List<RowDataDTO> datas) {
-        datas.forEach((data) -> logger.debug("{}", data.toString()));
+        datas.forEach((data) -> logger.debug("{}", data));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .build()

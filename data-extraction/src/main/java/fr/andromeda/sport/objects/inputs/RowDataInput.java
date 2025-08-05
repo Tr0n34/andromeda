@@ -1,8 +1,8 @@
 package fr.andromeda.sport.objects.inputs;
 
-import fr.andromeda.sport.objects.RowDataBase;
+import fr.andromeda.sport.objects.RowData;
 
-public class RowDataInput extends RowDataBase {
+public class RowDataInput extends RowData {
 
 
 
