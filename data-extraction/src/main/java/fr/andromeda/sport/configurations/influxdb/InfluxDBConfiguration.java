@@ -1,4 +1,4 @@
-package fr.andromeda.sport.configurations;
+package fr.andromeda.sport.configurations.influxdb;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;

@@ -1,19 +1,18 @@
 package fr.andromeda.sport.services;
 
-import fr.andromeda.sport.objects.dto.TrainingDTO;
-
-import java.time.LocalDateTime;
+import fr.andromeda.sport.dto.AggregateTrainingDTO;
+import fr.andromeda.sport.dto.TrainingDTO;
 
 public interface TrainingService {
 
-    Long start(LocalDateTime startedOn);
+    Long start(String deviceId);
 
-    void stop(TrainingDTO trainingDTO, LocalDateTime finishedOn);
+    void stop(Long id, String deviceId);
 
     void pause();
 
-    void addRowData();
+    TrainingDTO findTraining(Long id);
 
-    TrainingDTO fetchTraining(Long id);
+    AggregateTrainingDTO fetchTrainingWitRowData(Long id);
 
 }

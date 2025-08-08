@@ -1,48 +1,60 @@
-package fr.andromeda.sport.entities;
+package fr.andromeda.sport.objects;
 
-import com.influxdb.annotations.Column;
-import com.influxdb.annotations.Measurement;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Measurement(name="rower")
-public class RawDataEntity {
+public class RowData {
 
-    @Column(tag = true)
-    private Long id;
-    @Column(tag = true)
+    @JsonProperty("training_id")
+    private Long trainingId;
+
+    @JsonProperty("device_id")
     private String deviceId;
-    @Column
+
+    @JsonProperty("cadence_spm")
     private int cadenceSpm;
-    @Column
+
+    @JsonProperty("stroke_count")
     private int strokeCount;
-    @Column
+
+    @JsonProperty("avg_cadence_spm")
     private int avgCadenceSpm;
-    @Column
+
+    @JsonProperty("distance_m")
     private int distanceM;
-    @Column
+
+    @JsonProperty("power_w")
     private int powerW;
-    @Column
+
+    @JsonProperty("avg_power_w")
     private int avgPowerW;
-    @Column
+
+    @JsonProperty("resistance_level")
     private int resistanceLevel;
-    @Column
+
+    @JsonProperty("calories_kcal")
     private int caloriesKcal;
-    @Column
+
+    @JsonProperty("heart_rate_bpm")
     private int heartRateBpm;
-    @Column
+
+    @JsonProperty("elapsed_time_s")
     private float elapsedTimeS;
-    @Column
+
+    @JsonProperty("remaining_time_s")
     private int remainingTimeS;
-    @Column
+
+    @JsonProperty("avg_pace_500m_s")
     private int avgPace500mS;
-    @Column
+
+    @JsonProperty("inst_pace_500m_s")
     private int instPace500mS;
 
-    public Long getId() {
-        return id;
+    public Long getTrainingId() {
+        return trainingId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTrainingId(Long trainingId) {
+        this.trainingId = trainingId;
     }
 
     public String getDeviceId() {
@@ -155,6 +167,27 @@ public class RawDataEntity {
 
     public void setInstPace500mS(int instPace500mS) {
         this.instPace500mS = instPace500mS;
+    }
+
+    @Override
+    public String toString() {
+        return "RawData{" +
+                "trainingId=" + trainingId +
+                ", deviceId='" + deviceId + '\'' +
+                ", cadenceSpm=" + cadenceSpm +
+                ", strokeCount=" + strokeCount +
+                ", avgCadenceSpm=" + avgCadenceSpm +
+                ", distanceM=" + distanceM +
+                ", powerW=" + powerW +
+                ", avgPowerW=" + avgPowerW +
+                ", resistanceLevel=" + resistanceLevel +
+                ", caloriesKcal=" + caloriesKcal +
+                ", heartRateBpm=" + heartRateBpm +
+                ", elapsedTimeS=" + elapsedTimeS +
+                ", remainingTimeS=" + remainingTimeS +
+                ", avgPace500mS=" + avgPace500mS +
+                ", instPace500mS=" + instPace500mS +
+                '}';
     }
 
 }

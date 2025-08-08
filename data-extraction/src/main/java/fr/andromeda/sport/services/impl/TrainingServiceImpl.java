@@ -1,41 +1,62 @@
 package fr.andromeda.sport.services.impl;
 
+import fr.andromeda.sport.dto.AggregateTrainingDTO;
+import fr.andromeda.sport.dto.RowDataDTO;
+import fr.andromeda.sport.dto.factories.TrainingDTOBuilder;
+import fr.andromeda.sport.entities.RowDataEntity;
 import fr.andromeda.sport.entities.TrainingEntity;
-import fr.andromeda.sport.objects.Training;
-import fr.andromeda.sport.objects.dto.TrainingDTO;
+import fr.andromeda.sport.exceptions.business.ResourceNotFoundException;
+import fr.andromeda.sport.mappers.RowDataFluxTableMapper;
+import fr.andromeda.sport.mappers.RowDataMapper;
+import fr.andromeda.sport.mappers.TrainingMapper;
+import fr.andromeda.sport.dto.TrainingDTO;
+import fr.andromeda.sport.repositories.RowDataRepository;
 import fr.andromeda.sport.repositories.TrainingRepository;
 import fr.andromeda.sport.services.TrainingService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class TrainingServiceImpl implements TrainingService {
 
     private static final Logger logger = LoggerFactory.getLogger(TrainingServiceImpl.class);
 
-    private TrainingRepository trainingRepository;
+    private final TrainingRepository trainingRepository;
+    private final TrainingMapper trainingMapper;
+    private final RowDataRepository rowDataRepository;
+    private final RowDataMapper rowDataMapper;
 
     @Autowired
-    public TrainingServiceImpl(TrainingRepository trainingRepository) {
+    public TrainingServiceImpl(TrainingRepository trainingRepository,
+                               RowDataRepository rowDataRepository,
+                               TrainingMapper trainingMapper,
+                               RowDataMapper rowDataMapper) {
         this.trainingRepository = trainingRepository;
+        this.rowDataRepository = rowDataRepository;
+        this.trainingMapper = trainingMapper;
+        this.rowDataMapper = rowDataMapper;
     }
 
     @Override
-    public Long start(LocalDateTime startedOn) {
-        TrainingEntity trainingEntity = new TrainingEntity();
-        trainingEntity.setStartedOn(startedOn);
+    public Long start(String deviceId) {
+        TrainingEntity trainingEntity = trainingMapper.toEntity(TrainingDTOBuilder.of(deviceId));
+        trainingEntity.setStartedOn(LocalDateTime.now());
         logger.debug("{}", trainingEntity);
         return trainingRepository.save(trainingEntity).getId();
     }
 
     @Override
-    public void stop(TrainingDTO trainingDTO, LocalDateTime finishedOn) {
-
+    public void stop(Long trainingId, String deviceId) {
+        TrainingEntity trainingEntity = trainingMapper.toEntity(TrainingDTOBuilder.of(trainingId, deviceId));
+        trainingEntity.setFinishedOn(LocalDateTime.now());
+        logger.debug("{}", trainingEntity);
+        trainingRepository.save(trainingEntity);
     }
 
     @Override
@@ -44,13 +65,20 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public void addRowData() {
-
+    public TrainingDTO findTraining(Long id) {
+        TrainingEntity trainingEntity = trainingRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.valueOf(id) + " n'existe pas.")
+        );
+        logger.debug("{}", trainingEntity);
+        return trainingMapper.toDto(trainingEntity);
     }
 
     @Override
-    public TrainingDTO fetchTraining(Long id) {
-        TrainingEntity trainingEntity = trainingRepository.findById(id).orElseThrow();
-        return null;
+    public AggregateTrainingDTO fetchTrainingWitRowData(Long id) {
+        TrainingDTO trainingDTO = trainingMapper.toDto(trainingRepository.findById(id).orElseThrow());
+        List<RowDataDTO> rowDataDTOs = rowDataMapper.toDtoList(rowDataRepository.findByTrainingId(Long.toString(id)).orElseThrow());
+        AggregateTrainingDTO aggregateTrainingDTO = new AggregateTrainingDTO(trainingDTO, rowDataDTOs);
+        logger.debug("{}", aggregateTrainingDTO);
+        return aggregateTrainingDTO;
     }
 }
