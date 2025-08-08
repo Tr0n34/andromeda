@@ -38,7 +38,6 @@ class TrainingControllerTest {
 
     @Test
     void start_shouldCreateTrainingAndReturnLocationHeader() throws Exception {
-        // Given
         long expectedId = 123L;
         String deviceId = "abc123";
         TrainingDTO trainingDTO = new TrainingDTO();

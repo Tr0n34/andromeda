@@ -28,7 +28,6 @@ public class ConsumeDataController {
         this.rowDataService = rowDataService;
     }
 
-    @Async
     @PostMapping("/data")
     public ResponseEntity<Void> receiveData(@RequestBody RowDataDTO data) {
         logger.debug("received data : {}", data);
@@ -37,7 +36,6 @@ public class ConsumeDataController {
         return ResponseEntity.created(location).build();
     }
 
-    @Async
     @PostMapping("/datas")
     public ResponseEntity<Void> receiveDataBatch(@RequestBody List<RowDataDTO> datas) {
         datas.forEach((data) -> logger.debug("{}", data));

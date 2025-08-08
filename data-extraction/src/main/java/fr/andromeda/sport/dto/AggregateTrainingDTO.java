@@ -2,37 +2,39 @@ package fr.andromeda.sport.dto;
 
 import java.util.List;
 
-public class AggregateTrainingDTO {
+public class AggregateTrainingDTO implements IDTO {
 
-    private TrainingDTO trainingDTO;
-    private List<RowDataDTO> rowDataDTOs;
+    private TrainingDTO training;
+    private List<RowDataDTO> rowData;
 
-    public AggregateTrainingDTO(TrainingDTO trainingDTO, List<RowDataDTO> rowDataDTO) {
-        this.trainingDTO = trainingDTO;
-        this.rowDataDTOs = rowDataDTO;
+    public AggregateTrainingDTO(TrainingDTO training, List<RowDataDTO> rowData) {
+        this.training = training;
+        this.rowData = rowData;
     }
 
-    public TrainingDTO getTrainingDTO() {
-        return trainingDTO;
+    public TrainingDTO getTraining() {
+        return training;
     }
 
-    public void setTrainingDTO(TrainingDTO trainingDTO) {
-        this.trainingDTO = trainingDTO;
+    public AggregateTrainingDTO setTraining(TrainingDTO training) {
+        this.training = training;
+        return this;
     }
 
-    public List<RowDataDTO> getRowDataDTOs() {
-        return rowDataDTOs;
+    public List<RowDataDTO> getRowData() {
+        return rowData;
     }
 
-    public void setRowDataDTOs(List<RowDataDTO> rowDataDTOs) {
-        this.rowDataDTOs = rowDataDTOs;
+    public AggregateTrainingDTO setRowData(List<RowDataDTO> rowData) {
+        this.rowData = rowData;
+        return this;
     }
 
     @Override
     public String toString() {
         return "AggregateTrainingDTO{" +
-                "trainingDTO=" + trainingDTO +
-                ", rowDataDTOs=" + rowDataDTOs +
+                "training=" + training +
+                ", rowData=" + rowData +
                 '}';
     }
 

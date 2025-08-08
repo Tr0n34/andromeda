@@ -2,18 +2,15 @@ package fr.andromeda.sport.services.impl;
 
 import fr.andromeda.sport.dto.AggregateTrainingDTO;
 import fr.andromeda.sport.dto.RowDataDTO;
-import fr.andromeda.sport.dto.factories.TrainingDTOBuilder;
-import fr.andromeda.sport.entities.RowDataEntity;
+import fr.andromeda.sport.dto.builders.TrainingDTOBuilder;
 import fr.andromeda.sport.entities.TrainingEntity;
 import fr.andromeda.sport.exceptions.business.ResourceNotFoundException;
-import fr.andromeda.sport.mappers.RowDataFluxTableMapper;
 import fr.andromeda.sport.mappers.RowDataMapper;
 import fr.andromeda.sport.mappers.TrainingMapper;
 import fr.andromeda.sport.dto.TrainingDTO;
 import fr.andromeda.sport.repositories.RowDataRepository;
 import fr.andromeda.sport.repositories.TrainingRepository;
 import fr.andromeda.sport.services.TrainingService;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +50,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public void stop(Long trainingId, String deviceId) {
-        TrainingEntity trainingEntity = trainingMapper.toEntity(TrainingDTOBuilder.of(trainingId, deviceId));
+        TrainingEntity trainingEntity = trainingRepository.findById(trainingId).orElseThrow();
         trainingEntity.setFinishedOn(LocalDateTime.now());
         logger.debug("{}", trainingEntity);
         trainingRepository.save(trainingEntity);
@@ -67,7 +64,7 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public TrainingDTO findTraining(Long id) {
         TrainingEntity trainingEntity = trainingRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(String.valueOf(id) + " n'existe pas.")
+                () -> new ResourceNotFoundException(id + " n'existe pas.")
         );
         logger.debug("{}", trainingEntity);
         return trainingMapper.toDto(trainingEntity);
@@ -81,4 +78,5 @@ public class TrainingServiceImpl implements TrainingService {
         logger.debug("{}", aggregateTrainingDTO);
         return aggregateTrainingDTO;
     }
+
 }

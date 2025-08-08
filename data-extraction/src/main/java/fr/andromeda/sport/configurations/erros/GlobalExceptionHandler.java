@@ -2,6 +2,8 @@ package fr.andromeda.sport.configurations.erros;
 
 import fr.andromeda.sport.exceptions.business.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handleBadRequest(
             IllegalArgumentException ex,
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
+        logger.error(ex.getMessage(), ex.getCause());
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
     }
 
@@ -22,14 +26,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleNotFound(
             ResourceNotFoundException ex,
             HttpServletRequest request) {
+        logger.error(ex.getMessage(), ex.getCause());
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationError(
             MethodArgumentNotValidException ex,
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
+        logger.error(ex.getMessage(), ex.getCause());
         String msg = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
@@ -42,6 +47,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleGeneric(
             Exception ex,
             HttpServletRequest request) {
+        logger.error(ex.getMessage(), ex.getCause());
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request.getRequestURI());
     }
 

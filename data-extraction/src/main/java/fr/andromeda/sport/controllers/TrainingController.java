@@ -3,6 +3,8 @@ package fr.andromeda.sport.controllers;
 import fr.andromeda.sport.dto.AggregateTrainingDTO;
 import fr.andromeda.sport.dto.TrainingDTO;
 import fr.andromeda.sport.services.TrainingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(path = "${api.prefix}/trainings")
+@Tag(name = "Training", description = "Training Session Manager")
 public class TrainingController {
 
     private static final Logger logger = LoggerFactory.getLogger(TrainingController.class);
@@ -26,18 +29,21 @@ public class TrainingController {
     }
 
     @PostMapping
+    @Operation(summary = "Start a training", description = "start a training and return the ID")
     ResponseEntity<Long> start(@RequestBody TrainingDTO trainingDTO) {
         Long trainingId = trainingService.start(trainingDTO.getDeviceId());
         URI location = ServletUriComponentsBuilder.fromPath("/api/v1/trainings")
                 .path("/{id}")
                 .buildAndExpand(trainingId)
                 .toUri();
+        logger.debug("{}", trainingDTO);
         return ResponseEntity.created(location).body(trainingId);
     }
 
     @PatchMapping(path = "/{id}/stop")
-    ResponseEntity<Void> stop(Long trainingId) {
-        return ResponseEntity.ok().build();
+    ResponseEntity<Void> stop(@PathVariable("id") Long trainingId, @RequestBody TrainingDTO trainingDTO) {
+        trainingService.stop(trainingId, trainingDTO.getDeviceId());
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(path = "/{id}/pause")

@@ -1,6 +1,5 @@
-package fr.andromeda.sport.dto.factories;
+package fr.andromeda.sport.dto.builders;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.andromeda.sport.dto.TrainingDTO;
 import fr.andromeda.sport.enums.TrainingStatus;
 
