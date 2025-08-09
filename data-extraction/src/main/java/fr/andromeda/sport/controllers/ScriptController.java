@@ -23,7 +23,7 @@ public class ScriptController {
     }
 
     @PostMapping
-    public ResponseEntity<String> start() throws IOException {
+    public ResponseEntity<String> start() throws IOException, InterruptedException {
         String processId = pythonScriptService.startDefault();
         URI location = ServletUriComponentsBuilder.fromPath("/api/v1/scripts")
                 .path("/{id}")
@@ -33,7 +33,7 @@ public class ScriptController {
     }
 
     @PostMapping(path = "/{id}/stop")
-    public ResponseEntity<Void> stop(@PathVariable("id") String processId) {
+    public ResponseEntity<Void> stop(@PathVariable("id") String processId) throws IOException, InterruptedException {
         pythonScriptService.stop(processId);
         return ResponseEntity.noContent().build();
     }

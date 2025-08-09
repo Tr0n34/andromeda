@@ -24,7 +24,7 @@ public class RowDataRepository {
     private static final Logger logger = LoggerFactory.getLogger(RowDataRepository.class);
 
     public static final String MEASUREMENT_NAME = "rower";
-    private static final String BUCKET_NAME = "row-data";
+    private static final String BUCKET_NAME = "raw-data";
 
     private final InfluxDBClient influxDBClient;
     private final WriteApi writeApi;

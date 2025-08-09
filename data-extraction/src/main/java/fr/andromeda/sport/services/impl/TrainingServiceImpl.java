@@ -4,6 +4,7 @@ import fr.andromeda.sport.dto.AggregateTrainingDTO;
 import fr.andromeda.sport.dto.RowDataDTO;
 import fr.andromeda.sport.dto.builders.TrainingDTOBuilder;
 import fr.andromeda.sport.entities.TrainingEntity;
+import fr.andromeda.sport.enums.TrainingStatus;
 import fr.andromeda.sport.exceptions.business.ResourceNotFoundException;
 import fr.andromeda.sport.mappers.RowDataMapper;
 import fr.andromeda.sport.mappers.TrainingMapper;
@@ -44,13 +45,15 @@ public class TrainingServiceImpl implements TrainingService {
     public Long start(String deviceId) {
         TrainingEntity trainingEntity = trainingMapper.toEntity(TrainingDTOBuilder.of(deviceId));
         trainingEntity.setStartedOn(LocalDateTime.now());
+        trainingEntity.setStatus(TrainingStatus.STARTED);
         logger.debug("{}", trainingEntity);
         return trainingRepository.save(trainingEntity).getId();
     }
 
     @Override
-    public void stop(Long trainingId, String deviceId) {
+    public void stop(Long trainingId) {
         TrainingEntity trainingEntity = trainingRepository.findById(trainingId).orElseThrow();
+        trainingEntity.setStatus(TrainingStatus.STOPPED);
         trainingEntity.setFinishedOn(LocalDateTime.now());
         logger.debug("{}", trainingEntity);
         trainingRepository.save(trainingEntity);
@@ -77,6 +80,11 @@ public class TrainingServiceImpl implements TrainingService {
         AggregateTrainingDTO aggregateTrainingDTO = new AggregateTrainingDTO(trainingDTO, rowDataDTOs);
         logger.debug("{}", aggregateTrainingDTO);
         return aggregateTrainingDTO;
+    }
+
+    @Override
+    public List<TrainingDTO> findAll() {
+        return trainingMapper.toDtoList(trainingRepository.findAll());
     }
 
 }

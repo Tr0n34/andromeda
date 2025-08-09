@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleBadRequest(
             IllegalArgumentException ex,
             HttpServletRequest request) {
-        logger.error(ex.getMessage(), ex.getCause());
+        logger.error(ex.getMessage(), ex);
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
     }
 
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleNotFound(
             ResourceNotFoundException ex,
             HttpServletRequest request) {
-        logger.error(ex.getMessage(), ex.getCause());
+        logger.error(ex.getMessage(), ex);
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
     }
 
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleValidationError(
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
-        logger.error(ex.getMessage(), ex.getCause());
+        logger.error(ex.getMessage(), ex);
         String msg = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())

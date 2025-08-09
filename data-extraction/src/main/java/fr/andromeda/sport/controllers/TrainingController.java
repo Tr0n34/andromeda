@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "${api.prefix}/trainings")
@@ -41,8 +42,8 @@ public class TrainingController {
     }
 
     @PatchMapping(path = "/{id}/stop")
-    ResponseEntity<Void> stop(@PathVariable("id") Long trainingId, @RequestBody TrainingDTO trainingDTO) {
-        trainingService.stop(trainingId, trainingDTO.getDeviceId());
+    ResponseEntity<Void> stop(@PathVariable("id") Long trainingId) {
+        trainingService.stop(trainingId);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,6 +68,11 @@ public class TrainingController {
         TrainingDTO trainingDTO = trainingService.findTraining(id);
         logger.debug("{}", trainingDTO);
         return ResponseEntity.ok(trainingDTO);
+    }
+
+    @GetMapping
+    ResponseEntity<List<TrainingDTO>> getAll() {
+        return ResponseEntity.ok(trainingService.findAll());
     }
 
 }
