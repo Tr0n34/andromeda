@@ -6,5 +6,6 @@ public enum PasswordExpirationPolicy {
     HOURS,
     DAYS,
     MONTH,
-    YEARS
+    YEARS,
+    INFINITE
 }

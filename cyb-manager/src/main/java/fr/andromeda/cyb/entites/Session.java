@@ -7,23 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class SessionEntity {
+@Table(name = "sessions")
+public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private ClientEntity client;
+    private Client client;
     private LocalDateTime startedOn;
     private LocalDateTime finishedOn;
     private Double totalPrice;
     private boolean useSubscription;
     private LocalDateTime date;
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SessionProductEntity> purchases = new ArrayList<>();
+    private List<SessionProduct> purchases = new ArrayList<>();
 
-    public void addProduct(ProductEntity product, int amount, int unitPrice) {
-        SessionProductEntity sessionProduct = new SessionProductEntity();
+    public void addProduct(Product product, int amount, int unitPrice) {
+        SessionProduct sessionProduct = new SessionProduct();
         sessionProduct.setSession(this);
         sessionProduct.setProduct(product);
         sessionProduct.setAmount(amount);
@@ -35,7 +36,7 @@ public class SessionEntity {
         return id;
     }
 
-    public SessionEntity setId(Long id) {
+    public Session setId(Long id) {
         this.id = id;
         return this;
     }
@@ -44,16 +45,16 @@ public class SessionEntity {
         return date;
     }
 
-    public SessionEntity setDate(LocalDateTime date) {
+    public Session setDate(LocalDateTime date) {
         this.date = date;
         return this;
     }
 
-    public ClientEntity getClient() {
+    public Client getClient() {
         return client;
     }
 
-    public SessionEntity setClient(ClientEntity client) {
+    public Session setClient(Client client) {
         this.client = client;
         return this;
     }
@@ -62,7 +63,7 @@ public class SessionEntity {
         return startedOn;
     }
 
-    public SessionEntity setStartedOn(LocalDateTime startedOn) {
+    public Session setStartedOn(LocalDateTime startedOn) {
         this.startedOn = startedOn;
         return this;
     }
@@ -71,7 +72,7 @@ public class SessionEntity {
         return finishedOn;
     }
 
-    public SessionEntity setFinishedOn(LocalDateTime finishedOn) {
+    public Session setFinishedOn(LocalDateTime finishedOn) {
         this.finishedOn = finishedOn;
         return this;
     }
@@ -80,7 +81,7 @@ public class SessionEntity {
         return totalPrice;
     }
 
-    public SessionEntity setTotalPrice(Double totalPrice) {
+    public Session setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
         return this;
     }
@@ -89,16 +90,16 @@ public class SessionEntity {
         return useSubscription;
     }
 
-    public SessionEntity setUseSubscription(boolean useSubscription) {
+    public Session setUseSubscription(boolean useSubscription) {
         this.useSubscription = useSubscription;
         return this;
     }
 
-    public List<SessionProductEntity> getPurchases() {
+    public List<SessionProduct> getPurchases() {
         return purchases;
     }
 
-    public SessionEntity setPurchases(List<SessionProductEntity> purchases) {
+    public Session setPurchases(List<SessionProduct> purchases) {
         this.purchases = purchases;
         return this;
     }

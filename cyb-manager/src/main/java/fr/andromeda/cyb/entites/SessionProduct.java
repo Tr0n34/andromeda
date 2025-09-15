@@ -1,20 +1,19 @@
 package fr.andromeda.cyb.entites;
 
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Primary;
 
 @Entity
-public class SessionProductEntity {
+public class SessionProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "session_id", foreignKey = @ForeignKey(name = "FK_sessionproduct_session"), nullable = false)
-    private SessionEntity session;
+    private Session session;
     @ManyToOne
     @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "FK_sessionproduct_product"), nullable = false)
-    private ProductEntity product;
+    private Product product;
     private int amount;
     private double unitPrice;
 
@@ -22,25 +21,25 @@ public class SessionProductEntity {
         return id;
     }
 
-    public SessionProductEntity setId(Long id) {
+    public SessionProduct setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public SessionEntity getSession() {
+    public Session getSession() {
         return session;
     }
 
-    public SessionProductEntity setSession(SessionEntity session) {
+    public SessionProduct setSession(Session session) {
         this.session = session;
         return this;
     }
 
-    public ProductEntity getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public SessionProductEntity setProduct(ProductEntity product) {
+    public SessionProduct setProduct(Product product) {
         this.product = product;
         return this;
     }
@@ -49,7 +48,7 @@ public class SessionProductEntity {
         return amount;
     }
 
-    public SessionProductEntity setAmount(int amount) {
+    public SessionProduct setAmount(int amount) {
         this.amount = amount;
         return this;
     }
@@ -58,7 +57,7 @@ public class SessionProductEntity {
         return unitPrice;
     }
 
-    public SessionProductEntity setUnitPrice(double unitPrice) {
+    public SessionProduct setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
         return this;
     }

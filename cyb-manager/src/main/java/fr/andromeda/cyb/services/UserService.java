@@ -8,4 +8,6 @@ public interface UserService extends UserDetailsService {
 
     UserDTO loadUserByUsername(String username) throws UsernameNotFoundException;
 
+    UserDTO create(UserDTO userDTO);
+
 }

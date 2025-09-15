@@ -11,7 +11,9 @@ public interface TrainingService {
 
     void stop(Long id);
 
-    void pause();
+    void pause(Long id);
+
+    void resume(Long id);
 
     TrainingDTO findTraining(Long id);
 

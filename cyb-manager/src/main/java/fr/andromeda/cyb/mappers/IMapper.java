@@ -3,6 +3,7 @@ package fr.andromeda.cyb.mappers;
 import fr.andromeda.cyb.dto.IDTO;
 import fr.andromeda.cyb.entites.IEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IMapper<U extends IDTO, V extends IEntity> {

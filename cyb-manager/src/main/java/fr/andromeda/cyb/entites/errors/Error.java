@@ -1,12 +1,14 @@
-package fr.andromeda.cyb.entites;
+package fr.andromeda.cyb.entites.errors;
 
+import fr.andromeda.cyb.entites.IEntity;
 import jakarta.persistence.*;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class ErrorEntity implements IEntity {
+@Table(name = "errors")
+public class Error implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,7 @@ public class ErrorEntity implements IEntity {
         return id;
     }
 
-    public ErrorEntity setId(Long id) {
+    public Error setId(Long id) {
         this.id = id;
         return this;
     }
@@ -31,7 +33,7 @@ public class ErrorEntity implements IEntity {
         return status;
     }
 
-    public ErrorEntity setStatus(HttpStatus status) {
+    public Error setStatus(HttpStatus status) {
         this.status = status;
         return this;
     }
@@ -40,7 +42,7 @@ public class ErrorEntity implements IEntity {
         return code;
     }
 
-    public ErrorEntity setCode(String code) {
+    public Error setCode(String code) {
         this.code = code;
         return this;
     }
@@ -49,7 +51,7 @@ public class ErrorEntity implements IEntity {
         return message;
     }
 
-    public ErrorEntity setMessage(String message) {
+    public Error setMessage(String message) {
         this.message = message;
         return this;
     }
@@ -58,7 +60,7 @@ public class ErrorEntity implements IEntity {
         return path;
     }
 
-    public ErrorEntity setPath(String path) {
+    public Error setPath(String path) {
         this.path = path;
         return this;
     }
@@ -67,7 +69,7 @@ public class ErrorEntity implements IEntity {
         return time;
     }
 
-    public ErrorEntity setTime(LocalDateTime time) {
+    public Error setTime(LocalDateTime time) {
         this.time = time;
         return this;
     }

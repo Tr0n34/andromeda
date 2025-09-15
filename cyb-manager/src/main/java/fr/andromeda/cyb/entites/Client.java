@@ -3,7 +3,8 @@ package fr.andromeda.cyb.entites;
 import jakarta.persistence.*;
 
 @Entity
-public class ClientEntity implements IEntity {
+@Table(name = "clients")
+public class Client implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class ClientEntity implements IEntity {
         return id;
     }
 
-    public ClientEntity setId(Long id) {
+    public Client setId(Long id) {
         this.id = id;
         return this;
     }
@@ -29,7 +30,7 @@ public class ClientEntity implements IEntity {
         return firstName;
     }
 
-    public ClientEntity setFirstName(String firstName) {
+    public Client setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -38,7 +39,7 @@ public class ClientEntity implements IEntity {
         return lastName;
     }
 
-    public ClientEntity setLastName(String lastName) {
+    public Client setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -47,7 +48,7 @@ public class ClientEntity implements IEntity {
         return email;
     }
 
-    public ClientEntity setEmail(String email) {
+    public Client setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -56,7 +57,7 @@ public class ClientEntity implements IEntity {
         return activeSubscription;
     }
 
-    public ClientEntity setActiveSubscription(ActiveSubscription activeSubscription) {
+    public Client setActiveSubscription(ActiveSubscription activeSubscription) {
         this.activeSubscription = activeSubscription;
         return this;
     }

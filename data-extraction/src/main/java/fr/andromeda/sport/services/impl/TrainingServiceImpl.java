@@ -52,16 +52,34 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public void stop(Long trainingId) {
-        TrainingEntity trainingEntity = trainingRepository.findById(trainingId).orElseThrow();
-        trainingEntity.setStatus(TrainingStatus.STOPPED);
-        trainingEntity.setFinishedOn(LocalDateTime.now());
-        logger.debug("{}", trainingEntity);
-        trainingRepository.save(trainingEntity);
+        trainingRepository.findById(trainingId).ifPresent(
+            (training) -> {
+                training.setStatus(TrainingStatus.STOPPED);
+                training.setFinishedOn(LocalDateTime.now());
+                logger.debug("{}", training);
+                trainingRepository.save(training);
+            }
+        );
     }
 
     @Override
-    public void pause() {
+    public void pause(Long trainingId) {
+        changeStatus(trainingId, TrainingStatus.RESUMED);
+    }
 
+    @Override
+    public void resume(Long trainingId) {
+        changeStatus(trainingId, TrainingStatus.RESUMED);
+    }
+
+    private void changeStatus(Long trainingId, TrainingStatus status) {
+        trainingRepository.findById(trainingId).ifPresent(
+                (training) -> {
+                    training.setStatus(status);
+                    logger.debug("{}", training);
+                    trainingRepository.save(training);
+                }
+        );
     }
 
     @Override
@@ -86,5 +104,6 @@ public class TrainingServiceImpl implements TrainingService {
     public List<TrainingDTO> findAll() {
         return trainingMapper.toDtoList(trainingRepository.findAll());
     }
+
 
 }

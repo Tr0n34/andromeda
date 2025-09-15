@@ -1,7 +1,7 @@
 package fr.andromeda.cyb.services.impl;
 
 import fr.andromeda.cyb.dto.UserDTO;
-import fr.andromeda.cyb.entites.UserEntity;
+import fr.andromeda.cyb.entites.User;
 import fr.andromeda.cyb.mappers.UserMapper;
 import fr.andromeda.cyb.repositories.UserRepository;
 import fr.andromeda.cyb.services.UserService;
@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.time.Instant;
 
 @Service
@@ -27,18 +29,20 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void save(UserDTO userDTO) {
+    public UserDTO create(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(userMapper.toEntity(userDTO));
+        return userMapper.toDto(userRepository.save(userMapper.toEntity(userDTO)));
     }
 
     public void lock(Long id) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+
     }
 
+    @Transactional
     @Override
     public UserDTO loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByUsernameWithRoles(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return userMapper.toDto(user);
     }
 

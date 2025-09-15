@@ -1,13 +1,13 @@
 package fr.andromeda.cyb.repositories;
 
-import fr.andromeda.cyb.entites.ErrorEntity;
+import fr.andromeda.cyb.entites.errors.Error;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 
-public interface ErrorRepository extends JpaRepository<ErrorEntity, Long> {
+public interface ErrorRepository extends JpaRepository<Error, Long> {
 
-    ErrorEntity findByCode(String code);
+    Error findByCode(String code);
 
-    ErrorEntity findByStatus(HttpStatus status);
+    Error findByStatus(HttpStatus status);
 
 }

@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 import java.time.Duration;
 
 @Entity
-public class ProductEntity {
+@Table(name = "products")
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class ProductEntity {
         return id;
     }
 
-    public ProductEntity setId(Long id) {
+    public Product setId(Long id) {
         this.id = id;
         return this;
     }
@@ -33,7 +34,7 @@ public class ProductEntity {
         return nom;
     }
 
-    public ProductEntity setNom(String nom) {
+    public Product setNom(String nom) {
         this.nom = nom;
         return this;
     }
@@ -42,7 +43,7 @@ public class ProductEntity {
         return type;
     }
 
-    public ProductEntity setType(ProductType type) {
+    public Product setType(ProductType type) {
         this.type = type;
         return this;
     }
@@ -51,7 +52,7 @@ public class ProductEntity {
         return price;
     }
 
-    public ProductEntity setPrice(int price) {
+    public Product setPrice(int price) {
         this.price = price;
         return this;
     }
@@ -60,7 +61,7 @@ public class ProductEntity {
         return maxDuration;
     }
 
-    public ProductEntity setMaxDuration(Duration maxDuration) {
+    public Product setMaxDuration(Duration maxDuration) {
         this.maxDuration = maxDuration;
         return this;
     }

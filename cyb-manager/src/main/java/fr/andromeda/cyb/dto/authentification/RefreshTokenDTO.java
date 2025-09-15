@@ -1,29 +1,65 @@
 package fr.andromeda.cyb.dto.authentification;
 
 import fr.andromeda.cyb.dto.IDTO;
+import fr.andromeda.cyb.dto.UserDTO;
+
+import java.time.Instant;
 
 public class RefreshTokenDTO implements IDTO {
 
-    private String refreshToken;
+    private Long id;
+    private UserDTO user;
+    private String token;
+    private Instant issuedAt;
+    private Instant expiresAt;
+    private boolean revoked;
 
-    public RefreshTokenDTO(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public Long getId() {
+        return id;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public RefreshTokenDTO setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public RefreshTokenDTO setUser(UserDTO user) {
+        this.user = user;
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "RefreshTokenDTO{" +
-                "refreshToken='" + refreshToken + '\'' +
-                '}';
+    public String getToken() {
+        return token;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Instant getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(Instant issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public Instant getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Instant expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public boolean isRevoked() {
+        return revoked;
+    }
+
+    public void setRevoked(boolean revoked) {
+        this.revoked = revoked;
+    }
 }
