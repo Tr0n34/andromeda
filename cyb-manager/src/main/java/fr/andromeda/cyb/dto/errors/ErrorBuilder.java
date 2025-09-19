@@ -1,4 +1,4 @@
-package fr.andromeda.cyb.configurations.errors;
+package fr.andromeda.cyb.dto.errors;
 
 import org.springframework.http.HttpStatus;
 
@@ -9,8 +9,8 @@ public class ErrorBuilder {
     private HttpStatus status;
     private String code;
     private String message;
-    private String path;
-    private LocalDateTime time;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
 
     private ErrorBuilder() {
 
@@ -29,14 +29,6 @@ public class ErrorBuilder {
         return this;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public ErrorBuilder setPath(String path) {
-        this.path = path;
-        return this;
-    }
 
     public String getCode() {
         return code;
@@ -56,21 +48,28 @@ public class ErrorBuilder {
         return this;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
     }
 
-    public ErrorBuilder setTime(LocalDateTime time) {
-        this.time = time;
+    public ErrorBuilder setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
         return this;
     }
 
-    public ApiError build() {
-        return new ApiError()
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public ErrorBuilder setUpdatedOn(LocalDateTime updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
+    }
+
+    public ErrorDTO build() {
+        return new ErrorDTO()
                 .setCode(code)
-                .setTime(time)
                 .setMessage(message)
-                .setPath(path)
                 .setStatus(status);
     }
 

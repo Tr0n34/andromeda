@@ -1,6 +1,6 @@
 package fr.andromeda.cyb.dto.authentification;
 
-import fr.andromeda.cyb.dto.IDTO;
+import fr.andromeda.cyb.dto.interfaces.IDTO;
 import fr.andromeda.cyb.dto.UserDTO;
 
 import java.time.Instant;

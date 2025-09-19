@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.dto;
 
+import fr.andromeda.cyb.dto.interfaces.IDTO;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;

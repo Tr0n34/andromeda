@@ -1,20 +1,14 @@
 package fr.andromeda.cyb.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import fr.andromeda.cyb.dto.interfaces.IDTO;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class UserDTO implements UserDetails, IDTO {
-
-
 
     private Long id;
     private String username;

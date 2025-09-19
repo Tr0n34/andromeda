@@ -4,6 +4,7 @@ import fr.andromeda.cyb.dto.UserDTO;
 import fr.andromeda.cyb.dto.authentification.RefreshTokenDTO;
 import fr.andromeda.cyb.entites.User;
 import fr.andromeda.cyb.entites.authentication.RefreshToken;
+import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.mappers.RefreshTokenMapper;
 import fr.andromeda.cyb.mappers.UserMapper;
 import fr.andromeda.cyb.repositories.RefreshTokenRepository;
@@ -96,7 +97,7 @@ public class RefreshTokenService {
     }
 
     public void revoke(Long id) {
-        RefreshToken refreshToken = refreshTokenRepository.findById(id).orElseThrow(() -> new RuntimeException("RefreshToken not found"));
+        RefreshToken refreshToken = refreshTokenRepository.findById(id).orElseThrow();
         refreshToken.setRevoked(true);
         refreshTokenRepository.save(refreshToken);
     }

@@ -1,49 +1,53 @@
 package fr.andromeda.cyb.services.impl;
 
+import fr.andromeda.cyb.batch.errors.ErrorPopulator;
+import fr.andromeda.cyb.configurations.errors.ErrorProvider;
 import fr.andromeda.cyb.dto.UserDTO;
 import fr.andromeda.cyb.entites.User;
+import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.mappers.UserMapper;
 import fr.andromeda.cyb.repositories.UserRepository;
-import fr.andromeda.cyb.services.UserService;
+import fr.andromeda.cyb.services.AbstractCrudService;
+import fr.andromeda.cyb.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.Instant;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserService extends AbstractCrudService<UserDTO, User, UserRepository, Long> implements IUserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, ErrorProvider errorProvider) {
+        super(userMapper, userRepository, User.class, errorProvider);
         this.passwordEncoder = passwordEncoder;
     }
 
     public UserDTO create(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        return userMapper.toDto(userRepository.save(userMapper.toEntity(userDTO)));
+        return super.create(userDTO);
     }
 
     public void lock(Long id) {
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
 
     }
 
     @Transactional
     @Override
-    public UserDTO loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameWithRoles(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return userMapper.toDto(user);
+    public UserDTO loadUserByUsername(String username) {
+        try {
+            return getMapper().toDto(getRepository().findByUsernameWithRoles(username).orElseThrow(() -> getErrorProvider().notFound(User.class)));
+        } catch (ResourceNotFoundException e) {
+            throw new UsernameNotFoundException(username);
+        }
     }
 
     public boolean isExpired(Jwt token) {

@@ -1,7 +1,7 @@
 package fr.andromeda.cyb.controllers;
 
 import fr.andromeda.cyb.dto.ClientDTO;
-import fr.andromeda.cyb.services.ClientService;
+import fr.andromeda.cyb.services.interfaces.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,16 +12,16 @@ import java.util.List;
 @Controller
 public class ClientController {
 
-    private ClientService clientService;
+    private IClientService IClientService;
 
     @Autowired
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    public ClientController(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
     @GetMapping
     public List<ClientDTO> getAllClients() {
-        return clientService.findAll();
+        return null;
     }
 
     @GetMapping("/{id}")
@@ -31,7 +31,7 @@ public class ClientController {
 
     @PostMapping
     public ClientDTO createClient(@RequestBody ClientDTO client) {
-        return clientService.save(client);
+        return null;
     }
 
     @PutMapping("/{id}")
@@ -41,7 +41,6 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-        clientService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

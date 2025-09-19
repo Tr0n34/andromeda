@@ -1,6 +1,6 @@
 package fr.andromeda.cyb.configurations.security;
 
-import fr.andromeda.cyb.services.UserService;
+import fr.andromeda.cyb.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @Autowired
-    public SecurityConfiguration(UserService userService) {
+    public SecurityConfiguration(IUserService userService) {
         this.userService = userService;
     }
 

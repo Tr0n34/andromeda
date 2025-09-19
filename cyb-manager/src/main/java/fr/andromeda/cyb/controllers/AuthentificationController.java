@@ -3,10 +3,10 @@ package fr.andromeda.cyb.controllers;
 import fr.andromeda.cyb.configurations.security.JwtTokenService;
 import fr.andromeda.cyb.configurations.security.RefreshTokenService;
 import fr.andromeda.cyb.dto.UserDTO;
-import fr.andromeda.cyb.dto.authentification.RefreshTokenDTO;
 import fr.andromeda.cyb.dto.authentification.TokenAuthenticationDTO;
 import fr.andromeda.cyb.dto.authentification.UserAuthenticationDTO;
-import fr.andromeda.cyb.services.UserService;
+import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
+import fr.andromeda.cyb.services.interfaces.IUserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("${api.prefix}/auth")
@@ -27,13 +24,13 @@ public class AuthentificationController {
     private static final Logger logger = LoggerFactory.getLogger(AuthentificationController.class);
 
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
+    private final IUserService userService;
     private final JwtTokenService jwtTokenService;
     private final RefreshTokenService refreshTokenService;
 
     @Autowired
     public AuthentificationController(AuthenticationManager authenticationManager,
-                                      UserService userService,
+                                      IUserService userService,
                                       RefreshTokenService refreshTokenService,
                                       JwtTokenService jwtTokenService) {
         this.authenticationManager = authenticationManager;
@@ -43,7 +40,7 @@ public class AuthentificationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenAuthenticationDTO> login(@RequestBody UserAuthenticationDTO userAuthenticationDTO, HttpServletResponse response) {
+    public ResponseEntity<TokenAuthenticationDTO> login(@RequestBody UserAuthenticationDTO userAuthenticationDTO, HttpServletResponse response) throws ResourceNotFoundException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userAuthenticationDTO.getUsername(),
                 userAuthenticationDTO.getPassword()));

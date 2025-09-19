@@ -30,7 +30,9 @@ public class User implements IEntity {
     private Set<Role> roles = new HashSet<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
-    private boolean locked;
+    @Column(name = "locked", nullable = false)
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
+    private Boolean locked;
     private LocalDateTime createdOn;
     private LocalDateTime expiredOn;
 

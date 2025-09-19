@@ -1,19 +1,19 @@
 package fr.andromeda.cyb.dto.errors;
 
-import fr.andromeda.cyb.dto.IDTO;
-import jakarta.persistence.*;
+import fr.andromeda.cyb.dto.interfaces.IDTO;
+import fr.andromeda.cyb.dto.interfaces.TimeHandlerDTO;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
-public class ErrorDTO implements IDTO {
+public class ErrorDTO implements IDTO, TimeHandlerDTO<ErrorDTO> {
 
     private Long id;
     private HttpStatus status;
     private String code;
     private String message;
-    private String path;
-    private LocalDateTime time;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
 
     public Long getId() {
         return id;
@@ -51,34 +51,26 @@ public class ErrorDTO implements IDTO {
         return this;
     }
 
-    public String getPath() {
-        return path;
+    @Override
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
     }
 
-    public ErrorDTO setPath(String path) {
-        this.path = path;
-        return this;
+    @Override
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
     }
 
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public ErrorDTO setTime(LocalDateTime time) {
-        this.time = time;
+    @Override
+    public ErrorDTO setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
         return this;
     }
 
     @Override
-    public String toString() {
-        return "ErrorDTO{" +
-                "id=" + id +
-                ", status=" + status +
-                ", code='" + code + '\'' +
-                ", message='" + message + '\'' +
-                ", path='" + path + '\'' +
-                ", time=" + time +
-                '}';
+    public ErrorDTO setUpdatedOn(LocalDateTime updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
     }
 
 }

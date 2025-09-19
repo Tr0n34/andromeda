@@ -1,6 +1,7 @@
 package fr.andromeda.cyb.entites.errors;
 
 import fr.andromeda.cyb.entites.IEntity;
+import fr.andromeda.cyb.entites.TimeHandlerEntity;
 import jakarta.persistence.*;
 import org.springframework.http.HttpStatus;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "errors")
-public class Error implements IEntity {
+public class Error implements IEntity, TimeHandlerEntity<Error> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +18,8 @@ public class Error implements IEntity {
     private HttpStatus status;
     private String code;
     private String message;
-    private String path;
-    private LocalDateTime time;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
 
     public Long getId() {
         return id;
@@ -56,21 +57,27 @@ public class Error implements IEntity {
         return this;
     }
 
-    public String getPath() {
-        return path;
+
+    @Override
+    public LocalDateTime getCreatedOn() {
+        return  createdOn;
     }
 
-    public Error setPath(String path) {
-        this.path = path;
+    @Override
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
+    }
+
+    @Override
+    public Error setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
         return this;
     }
 
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public Error setTime(LocalDateTime time) {
-        this.time = time;
+    @Override
+    public Error setUpdatedOn(LocalDateTime updatedOn) {
+        this.updatedOn = updatedOn;
         return this;
     }
+
 }

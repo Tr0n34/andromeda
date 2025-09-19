@@ -1,15 +1,24 @@
 package fr.andromeda.cyb.mappers;
 
-import fr.andromeda.cyb.dto.IDTO;
+import fr.andromeda.cyb.dto.errors.ErrorDTO;
+import fr.andromeda.cyb.dto.interfaces.IDTO;
 import fr.andromeda.cyb.entites.IEntity;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-public interface IMapper<U extends IDTO, V extends IEntity> {
+public interface IMapper<D extends IDTO, E extends IEntity> {
 
-    U toDto(V entity);
-    V toEntity(U dto);
-    List<U> toDtoList(List<V> entites);
+    D toDto(E entity);
+
+    E toEntity(D dto);
+
+    List<D> toDtoList(List<E> entites);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void patchFromDto(D dto, @MappingTarget E entity);
 
 }
