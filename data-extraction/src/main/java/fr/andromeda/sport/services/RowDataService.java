@@ -1,13 +1,13 @@
 package fr.andromeda.sport.services;
 
-import fr.andromeda.sport.objects.dto.RowDataDTO;
-import fr.andromeda.sport.objects.inputs.RowDataInput;
+import fr.andromeda.sport.dto.RowDataDTO;
+import fr.andromeda.sport.inputs.RowDataInput;
 
 import java.util.List;
 
 public interface RowDataService {
 
-    Long create(RowDataDTO rowDataDTO);
+    Long create(RowDataDTO rawDataDTO);
 
     RowDataDTO read(Long id);
 

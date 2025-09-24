@@ -1,9 +1,8 @@
 package fr.andromeda.sport.services.impl;
 
 import fr.andromeda.sport.mappers.RowDataMapper;
-import fr.andromeda.sport.objects.RowData;
-import fr.andromeda.sport.objects.dto.RowDataDTO;
-import fr.andromeda.sport.objects.inputs.RowDataInput;
+import fr.andromeda.sport.dto.RowDataDTO;
+import fr.andromeda.sport.inputs.RowDataInput;
 import fr.andromeda.sport.repositories.RowDataRepository;
 import fr.andromeda.sport.services.RowDataService;
 import org.slf4j.Logger;
@@ -28,8 +27,9 @@ public class RowDataServiceImpl implements RowDataService {
     }
 
     @Override
-    public Long create(RowDataDTO rowDataDTO) {
-        rowDataRepository.save(rowDataMapper.toEntity(rowDataDTO));
+    public Long create(RowDataDTO rawDataDTO) {
+        rowDataRepository.save(rowDataMapper.toEntity(rawDataDTO));
+        return 1L;
     }
 
     @Override

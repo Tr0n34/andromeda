@@ -1,0 +1,33 @@
+package fr.andromeda.sport.configurations.influxdb;
+
+import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.InfluxDBClientFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class InfluxDBConfiguration {
+
+    private static final Logger logger = LoggerFactory.getLogger(InfluxDBConfiguration.class);
+
+    @Value("${influx.url}")
+    private String url;
+
+    @Value("${influx.token}")
+    private String token;
+
+    @Value("${influx.org}")
+    private String org;
+
+    @Value("${influx.bucket}")
+    private String bucket;
+
+    @Bean
+    public InfluxDBClient influxDBClient() {
+        return InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
+    }
+
+}

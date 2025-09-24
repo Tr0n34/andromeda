@@ -1,0 +1,1 @@
+docker build -f configurations\app\Dockerfile -t cyb-manager:1.0 .
