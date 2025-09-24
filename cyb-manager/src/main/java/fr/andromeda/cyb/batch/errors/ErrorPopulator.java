@@ -3,7 +3,6 @@ package fr.andromeda.cyb.batch.errors;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
-import fr.andromeda.cyb.mappers.ErrorMapper;
 import fr.andromeda.cyb.repositories.ErrorRepository;
 import fr.andromeda.cyb.services.impl.ErrorService;
 import org.springframework.boot.ApplicationArguments;

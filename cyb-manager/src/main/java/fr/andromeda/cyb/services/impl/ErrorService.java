@@ -1,6 +1,5 @@
 package fr.andromeda.cyb.services.impl;
 
-import fr.andromeda.cyb.configurations.errors.ErrorProvider;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
 import fr.andromeda.cyb.entites.errors.Error;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
@@ -12,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepository, Long>  implements IErrorService {

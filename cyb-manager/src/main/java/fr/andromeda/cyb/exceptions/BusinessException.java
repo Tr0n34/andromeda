@@ -1,7 +1,5 @@
 package fr.andromeda.cyb.exceptions;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.springframework.http.HttpStatus;
 
 public class BusinessException extends Exception {

@@ -1,0 +1,1 @@
+./config.cmd --url https://github.com/Tr0n34/andromeda --token ABTAAFBFPOGNFUDUQ7RQV6TI2FXB6

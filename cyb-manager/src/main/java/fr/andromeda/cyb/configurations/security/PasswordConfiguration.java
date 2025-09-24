@@ -1,6 +1,5 @@
 package fr.andromeda.cyb.configurations.security;
 
-import com.nimbusds.jose.crypto.PasswordBasedDecrypter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Duration;
+
+import static java.time.Duration.*;
 
 @Configuration
 public class PasswordConfiguration {
@@ -23,7 +24,6 @@ public class PasswordConfiguration {
         return new PasswordExpiration(passwordExpirationPolicy, passwordExpirationDuration);
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -35,12 +35,12 @@ public class PasswordConfiguration {
     
     public Duration getPasswordDuration() {
         return switch (passwordExpirationPolicy) {
-            case DAYS -> Duration.ofDays(this.passwordExpirationDuration);
-            case HOURS -> Duration.ofHours(this.passwordExpirationDuration);
-            case MINUTES -> Duration.ofMinutes(this.passwordExpirationDuration);
-            case SECONDS -> Duration.ofSeconds(this.passwordExpirationDuration);
-            case MONTH ->  Duration.ofDays(this.passwordExpirationDuration * 30);
-            case YEARS -> Duration.ofDays(this.passwordExpirationDuration * 365);
+            case DAYS -> ofDays(this.passwordExpirationDuration);
+            case HOURS -> ofHours(this.passwordExpirationDuration);
+            case MINUTES -> ofMinutes(this.passwordExpirationDuration);
+            case SECONDS -> ofSeconds(this.passwordExpirationDuration);
+            case MONTH ->  ofDays(this.passwordExpirationDuration * 30);
+            case YEARS -> ofDays(this.passwordExpirationDuration * 365);
             default -> null;
         };
     }
