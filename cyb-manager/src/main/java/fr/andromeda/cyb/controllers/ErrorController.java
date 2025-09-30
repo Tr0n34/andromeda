@@ -27,7 +27,7 @@ public class ErrorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createError(@RequestBody ErrorDTO errorDTO) {
+    public ResponseEntity<Void> createError(@RequestBody ErrorDTO errorDTO) throws ResourceNotFoundException {
         ErrorDTO saved = errorService.create(errorDTO);
         logger.debug("error {} created", saved.getId());
         URI location = ServletUriComponentsBuilder.fromPath("/api/v1/errors")

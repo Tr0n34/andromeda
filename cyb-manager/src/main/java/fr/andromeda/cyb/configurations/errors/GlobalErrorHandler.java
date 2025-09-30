@@ -1,24 +1,19 @@
 package fr.andromeda.cyb.configurations.errors;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import fr.andromeda.cyb.dto.errors.ErrorBuilder;
+import fr.andromeda.cyb.dto.errors.ApiErrorDTO;
+import fr.andromeda.cyb.dto.errors.ApiErrorDTOBuilder;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
 import fr.andromeda.cyb.exceptions.BusinessException;
 import fr.andromeda.cyb.exceptions.JwtGenerationException;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
-import fr.andromeda.cyb.services.impl.ErrorService;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.oauth2.jwt.JwtEncodingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalErrorHandler {
@@ -26,20 +21,21 @@ public class GlobalErrorHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalErrorHandler.class);
 
     @ExceptionHandler({JwtGenerationException.class, JwtException.class, JwtEncodingException.class})
-    public ResponseEntity<ErrorDTO> handleJwtGenerationException(Exception exception) throws ResourceNotFoundException {
+    public ResponseEntity<ApiErrorDTO> handleJwtGenerationException(Exception exception) throws ResourceNotFoundException {
         logger.error(exception.getMessage(), exception);
         return null;
     }
 
     @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity<ErrorDTO> handle404Exception(BusinessException exception) throws ResourceNotFoundException {
+    public ResponseEntity<ApiErrorDTO> handle404Exception(ResourceNotFoundException exception) throws ResourceNotFoundException {
         logger.error(exception.getMessage(), exception);
-        ErrorDTO errorDTO = ErrorBuilder.create()
+        ApiErrorDTO apiErrorDTO = ApiErrorDTOBuilder.create()
                 .setCode(exception.getCode())
                 .setMessage(exception.getMessage())
                 .setStatus((exception.getStatus()))
+                .setEntityName(exception.getEntityName())
                 .build();
-        return ResponseEntity.status(errorDTO.getStatus()).body(errorDTO);
+        return ResponseEntity.status(apiErrorDTO.getStatus()).body(apiErrorDTO);
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class})

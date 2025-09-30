@@ -44,7 +44,7 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
         return mapper.toDto(entity);
     }
 
-    public D create(D dto) {
+    public D create(D dto) throws ResourceNotFoundException {
         E entity = repository.save(mapper.toEntity(dto));
         logger.debug("create entity with id {}", entity);
         return mapper.toDto(entity);

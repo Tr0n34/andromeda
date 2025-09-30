@@ -22,12 +22,12 @@ public class ErrorProviderImpl implements ErrorProvider {
     public ResourceNotFoundException notFound(String entityName) {
         ErrorDTO errorDTO = null;
         try {
-            errorDTO = errorService.findByCode("TC_NOT_FOUND");
+            errorDTO = errorService.findByCode("BS_RESOURCE_NOT_FOUND");
         } catch (ResourceNotFoundException e) {
             throw new RuntimeException(e);
         }
         String message = String.format(errorDTO.getMessage(), entityName);
-        return new ResourceNotFoundException(errorDTO.getCode(), message, errorDTO.getStatus());
+        return new ResourceNotFoundException(errorDTO.getCode(), message, errorDTO.getStatus(), entityName);
     }
 
     @Override

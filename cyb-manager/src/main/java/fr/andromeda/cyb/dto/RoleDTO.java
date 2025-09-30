@@ -12,10 +12,8 @@ public class RoleDTO implements IDTO, GrantedAuthority, AuditableDTO {
 
     private Long id;
     private String authority;
-    private Set<UserDTO> users = new HashSet<>();
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
-
 
     public Long getId() {
         return id;
@@ -33,15 +31,6 @@ public class RoleDTO implements IDTO, GrantedAuthority, AuditableDTO {
 
     public RoleDTO setAuthority(String authority) {
         this.authority = authority;
-        return this;
-    }
-
-    public Set<UserDTO> getUsers() {
-        return users;
-    }
-
-    public RoleDTO setUsers(Set<UserDTO> users) {
-        this.users = users;
         return this;
     }
 

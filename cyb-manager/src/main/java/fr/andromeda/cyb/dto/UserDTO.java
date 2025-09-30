@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.andromeda.cyb.dto.interfaces.AuditableDTO;
 import fr.andromeda.cyb.dto.interfaces.IDTO;
 import org.springframework.security.core.GrantedAuthority;
@@ -73,15 +74,6 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
         return this;
     }
 
-    public Set<RoleDTO> getRoles() {
-        return roles;
-    }
-
-    public UserDTO setRoles(Set<RoleDTO> roles) {
-        this.roles = roles;
-        return this;
-    }
-
     public LocalDateTime getExpiredOn() {
         return expiredOn;
     }
@@ -91,9 +83,19 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
         return this;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+
+    public Set<RoleDTO> getRoles() {
+        return roles;
+    }
+
+    public UserDTO setRoles(Set<RoleDTO> roles) {
+        this.roles = roles;
+        return this;
     }
 
     @Override

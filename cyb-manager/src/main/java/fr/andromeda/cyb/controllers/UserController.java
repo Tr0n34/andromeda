@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws ResourceNotFoundException {
         UserDTO newUserDTO = userService.create(userDTO);
         URI location = ServletUriComponentsBuilder.fromPath("/api/v1/users")
                 .path("/{id}")
