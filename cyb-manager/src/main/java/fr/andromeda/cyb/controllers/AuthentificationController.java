@@ -1,10 +1,10 @@
 package fr.andromeda.cyb.controllers;
 
-import fr.andromeda.cyb.configurations.security.JwtTokenService;
-import fr.andromeda.cyb.configurations.security.RefreshTokenService;
+import fr.andromeda.cyb.services.impl.JwtTokenService;
+import fr.andromeda.cyb.services.impl.RefreshTokenService;
 import fr.andromeda.cyb.dto.UserDTO;
-import fr.andromeda.cyb.dto.authentification.TokenAuthenticationDTO;
-import fr.andromeda.cyb.dto.authentification.UserAuthenticationDTO;
+import fr.andromeda.cyb.dto.authentication.TokenAuthenticationDTO;
+import fr.andromeda.cyb.dto.authentication.UserAuthenticationDTO;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.services.interfaces.IUserService;
 import jakarta.servlet.http.HttpServletResponse;

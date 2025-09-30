@@ -1,6 +1,7 @@
 package fr.andromeda.cyb.configurations.security;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import fr.andromeda.cyb.services.impl.JwtTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -27,7 +27,7 @@ public class UserService extends AbstractCrudService<UserDTO, User, UserReposito
 
     @Autowired
     public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, ErrorProvider errorProvider) {
-        super(userMapper, userRepository, User.class, errorProvider);
+        super(userMapper, userRepository, User.class.getSimpleName(), errorProvider);
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,7 +44,7 @@ public class UserService extends AbstractCrudService<UserDTO, User, UserReposito
     @Override
     public UserDTO loadUserByUsername(String username) {
         try {
-            return getMapper().toDto(getRepository().findByUsernameWithRoles(username).orElseThrow(() -> getErrorProvider().notFound(User.class)));
+            return getMapper().toDto(getRepository().findByUsernameWithRoles(username).orElseThrow(() -> getErrorProvider().notFound(User.class.getSimpleName())));
         } catch (ResourceNotFoundException e) {
             throw new UsernameNotFoundException(username);
         }

@@ -1,24 +1,17 @@
-package fr.andromeda.cyb.configurations.security;
+package fr.andromeda.cyb.services.impl;
 
-import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import fr.andromeda.cyb.dto.RoleDTO;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.*;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collection;
 import java.util.Set;
 
 public class JwtTokenService {

@@ -16,4 +16,6 @@ public interface IErrorService {
 
     void createAll(List<ErrorDTO> errorDTOs);
 
+    List<ErrorDTO> findAllByStatusAndEntityName(HttpStatus status, String entityName) throws ResourceNotFoundException;
+
 }

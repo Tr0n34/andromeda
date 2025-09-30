@@ -7,6 +7,4 @@ public interface IUserService extends UserDetailsService {
 
     UserDTO loadUserByUsername(String username);
 
-    UserDTO create(UserDTO userDTO);
-
 }

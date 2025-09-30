@@ -1,5 +1,6 @@
 [
   { "code": "BS_RESOURCE_NOT_FOUND", "message": "%s not found", "status": "NOT_FOUND" },
   { "code": "TC_MESSAGE_NOT_READABLE", "message": "enumeration : %s accepts only value : %s", "status": "BAD_REQUEST" },
-  { "code": "BS_JWT_GENERATION", "message": "Jwt error token generation", "status": "UNAUTHORIZED" }
+  { "code": "BS_JWT_GENERATION", "message": "Jwt error token generation", "status": "UNAUTHORIZED", "entityName": "RefreshToken" },
+  { "code": "BS_NO_ROLE", "message":  "no role are defined (null or empty)", "status":  "UNAUTHORIZED"}
 ]

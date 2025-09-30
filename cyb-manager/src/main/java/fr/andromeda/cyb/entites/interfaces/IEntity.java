@@ -1,4 +1,4 @@
-package fr.andromeda.cyb.entites;
+package fr.andromeda.cyb.entites.interfaces;
 
 public interface IEntity {
 

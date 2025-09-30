@@ -1,15 +1,13 @@
 package fr.andromeda.cyb.entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
+import fr.andromeda.cyb.entites.interfaces.IEntity;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "roles")
-public class Role implements IEntity, GrantedAuthority {
+public class Role extends AuditableEntity implements IEntity, GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

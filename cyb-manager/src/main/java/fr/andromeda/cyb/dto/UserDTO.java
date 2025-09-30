@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.dto;
 
+import fr.andromeda.cyb.dto.interfaces.AuditableDTO;
 import fr.andromeda.cyb.dto.interfaces.IDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
-public class UserDTO implements UserDetails, IDTO {
+public class UserDTO implements UserDetails, IDTO, AuditableDTO {
 
     private Long id;
     private String username;
@@ -18,8 +19,9 @@ public class UserDTO implements UserDetails, IDTO {
     private String email;
     private boolean locked;
     private Set<RoleDTO> roles;
-    private LocalDateTime createdOn;
     private LocalDateTime expiredOn;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
 
     public Long getId() {
         return id;
@@ -80,15 +82,6 @@ public class UserDTO implements UserDetails, IDTO {
         return this;
     }
 
-    public LocalDateTime getCreatedOn() {
-        return createdOn;
-    }
-
-    public UserDTO setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
-        return this;
-    }
-
     public LocalDateTime getExpiredOn() {
         return expiredOn;
     }
@@ -141,6 +134,26 @@ public class UserDTO implements UserDetails, IDTO {
     @Override
     public boolean isEnabled() {
         return !locked;
+    }
+
+    @Override
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
+    }
+
+    public UserDTO setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    @Override
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public UserDTO setUpdatedOn(LocalDateTime updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
     }
 
 }

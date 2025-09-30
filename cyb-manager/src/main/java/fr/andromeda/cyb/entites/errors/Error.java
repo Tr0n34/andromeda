@@ -1,15 +1,13 @@
 package fr.andromeda.cyb.entites.errors;
 
-import fr.andromeda.cyb.entites.IEntity;
-import fr.andromeda.cyb.entites.TimeHandlerEntity;
+import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
+import fr.andromeda.cyb.entites.interfaces.IEntity;
 import jakarta.persistence.*;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "errors")
-public class Error implements IEntity, TimeHandlerEntity<Error> {
+public class Error extends AuditableEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +16,7 @@ public class Error implements IEntity, TimeHandlerEntity<Error> {
     private HttpStatus status;
     private String code;
     private String message;
-    private LocalDateTime createdOn;
-    private LocalDateTime updatedOn;
+    private String entityName;
 
     public Long getId() {
         return id;
@@ -27,6 +24,15 @@ public class Error implements IEntity, TimeHandlerEntity<Error> {
 
     public Error setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public Error setEntityName(String entityName) {
+        this.entityName = entityName;
         return this;
     }
 
@@ -54,29 +60,6 @@ public class Error implements IEntity, TimeHandlerEntity<Error> {
 
     public Error setMessage(String message) {
         this.message = message;
-        return this;
-    }
-
-
-    @Override
-    public LocalDateTime getCreatedOn() {
-        return  createdOn;
-    }
-
-    @Override
-    public LocalDateTime getUpdatedOn() {
-        return updatedOn;
-    }
-
-    @Override
-    public Error setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
-        return this;
-    }
-
-    @Override
-    public Error setUpdatedOn(LocalDateTime updatedOn) {
-        this.updatedOn = updatedOn;
         return this;
     }
 

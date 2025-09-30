@@ -1,4 +1,4 @@
-package fr.andromeda.cyb.dto.authentification;
+package fr.andromeda.cyb.dto.authentication;
 
 import fr.andromeda.cyb.dto.interfaces.IDTO;
 

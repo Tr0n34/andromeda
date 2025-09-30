@@ -1,10 +1,12 @@
 package fr.andromeda.cyb.entites;
 
+import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
+import fr.andromeda.cyb.entites.interfaces.IEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clients")
-public class Client implements IEntity {
+public class Client extends AuditableEntity  implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

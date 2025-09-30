@@ -1,17 +1,18 @@
 package fr.andromeda.cyb.dto.errors;
 
+import fr.andromeda.cyb.dto.interfaces.AuditableDTO;
 import fr.andromeda.cyb.dto.interfaces.IDTO;
-import fr.andromeda.cyb.dto.interfaces.TimeHandlerDTO;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
-public class ErrorDTO implements IDTO, TimeHandlerDTO<ErrorDTO> {
+public class ErrorDTO implements IDTO, AuditableDTO {
 
     private Long id;
     private HttpStatus status;
     private String code;
     private String message;
+    private String entityName;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 
@@ -21,6 +22,15 @@ public class ErrorDTO implements IDTO, TimeHandlerDTO<ErrorDTO> {
 
     public ErrorDTO setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public ErrorDTO setEntityName(String entityName) {
+        this.entityName = entityName;
         return this;
     }
 
@@ -56,18 +66,16 @@ public class ErrorDTO implements IDTO, TimeHandlerDTO<ErrorDTO> {
         return createdOn;
     }
 
-    @Override
-    public LocalDateTime getUpdatedOn() {
-        return updatedOn;
-    }
-
-    @Override
     public ErrorDTO setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
         return this;
     }
 
     @Override
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
+    }
+
     public ErrorDTO setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
         return this;

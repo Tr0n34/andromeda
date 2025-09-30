@@ -1,6 +1,7 @@
-package fr.andromeda.cyb.entites.authentication;
+package fr.andromeda.cyb.entites.auth;
 
-import fr.andromeda.cyb.entites.IEntity;
+import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
+import fr.andromeda.cyb.entites.interfaces.IEntity;
 import fr.andromeda.cyb.entites.User;
 import jakarta.persistence.*;
 
@@ -8,7 +9,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "refresh_tokens")
-public class RefreshToken implements IEntity {
+public class RefreshToken extends AuditableEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,13 +1,14 @@
-package fr.andromeda.cyb.configurations.security;
+package fr.andromeda.cyb.services.impl;
 
 import fr.andromeda.cyb.dto.UserDTO;
-import fr.andromeda.cyb.dto.authentification.RefreshTokenDTO;
+import fr.andromeda.cyb.dto.authentication.RefreshTokenDTO;
 import fr.andromeda.cyb.entites.User;
-import fr.andromeda.cyb.entites.authentication.RefreshToken;
+import fr.andromeda.cyb.entites.auth.RefreshToken;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.mappers.RefreshTokenMapper;
 import fr.andromeda.cyb.mappers.UserMapper;
 import fr.andromeda.cyb.repositories.RefreshTokenRepository;
+import fr.andromeda.cyb.services.AbstractCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,10 @@ import java.time.Duration;
 import java.time.Instant;
 
 @Service
-public class RefreshTokenService {
+public class RefreshTokenService extends AbstractCrudService<RefreshTokenDTO, RefreshToken, RefreshTokenRepository, Long>  {
 
     private static final Logger logger = LoggerFactory.getLogger(RefreshTokenService.class);
 
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final RefreshTokenMapper refreshTokenMapper;
     private final UserMapper userMapper;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder encoder;
@@ -35,8 +34,7 @@ public class RefreshTokenService {
                                UserMapper userMapper,
                                JwtTokenService jwtTokenService,
                                PasswordEncoder encoder) {
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.refreshTokenMapper = refreshTokenMapper;
+        super(refreshTokenMapper, refreshTokenRepository, RefreshToken.class.getSimpleName());
         this.jwtTokenService = jwtTokenService;
         this.userMapper = userMapper;
         this.encoder = encoder;
@@ -44,30 +42,30 @@ public class RefreshTokenService {
 
     public RefreshTokenDTO registerToken(UserDTO userDTO, Jwt token) {
         User user = userMapper.toEntity(userDTO);
-        RefreshToken savedToken = refreshTokenRepository
+        RefreshToken savedToken = getRepository()
                 .findByUserAndRevokedFalseAndExpiresAtAfter(user, Instant.now())
                 .map(existingToken -> {
                     existingToken.setRevoked(true);
                     logger.debug("RefreshToken {} already exists for userId: {} - Revoked in progress",
                             existingToken.getTokenHash(), user.getId());
-                    refreshTokenRepository.save(existingToken);
+                    getRepository().save(existingToken);
                     return createToken(user, token);
                 })
                 .orElseGet(() -> createToken(user, token));
-        return refreshTokenMapper.toDto(savedToken);
+        return getMapper().toDto(savedToken);
     }
 
     public RefreshTokenDTO getRefreshToken(UserDTO userDTO, Jwt token) {
         User user = userMapper.toEntity(userDTO);
-        RefreshToken refreshToken = refreshTokenRepository.findByUserAndRevokedFalseAndExpiresAtAfter(user, Instant.now())
+        RefreshToken refreshToken = getRepository().findByUserAndRevokedFalseAndExpiresAtAfter(user, Instant.now())
                 .orElseThrow(
                         () ->  new RuntimeException("RefreshToken not found or revoked for userId: " + user.getId())
                 );
-        return refreshTokenMapper.toDto(refreshToken);
+        return getMapper().toDto(refreshToken);
     }
 
     public RefreshTokenDTO validateToken(String refreshTokenValue) {
-        return refreshTokenMapper.toDto(refreshTokenRepository.findAll().stream()
+        return getMapper().toDto(getRepository().findAll().stream()
                 .filter(t -> !t.isRevoked() && t.getExpiresAt().isAfter(Instant.now()))
                 .filter(t -> encoder.matches(refreshTokenValue, t.getTokenHash()))
                 .findFirst()
@@ -75,7 +73,7 @@ public class RefreshTokenService {
     }
 
     private RefreshToken createToken(User user, Jwt token) {
-        return refreshTokenRepository.save(new RefreshToken()
+        return getRepository().save(new RefreshToken()
                 .setUser(user)
                 .setTokenHash(encoder.encode(token.getTokenValue()))
                 .setExpiresAt(token.getExpiresAt())
@@ -84,7 +82,7 @@ public class RefreshTokenService {
 
     public void purgeRevokedTokens() {
         logger.debug("Purging revoked refresh tokens");
-        refreshTokenRepository.deleteByRevokedTrue();
+        getRepository().deleteByRevokedTrue();
     }
 
     public boolean isExpired(RefreshTokenDTO refreshTokenDTO) {
@@ -92,20 +90,20 @@ public class RefreshTokenService {
     }
 
     public boolean isExpired(String rawToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByTokenHashAndRevokedFalse(encoder.encode(rawToken)).orElseThrow();
+        RefreshToken refreshToken = getRepository().findByTokenHashAndRevokedFalse(encoder.encode(rawToken)).orElseThrow();
         return refreshToken.getExpiresAt().isAfter(Instant.now());
     }
 
     public void revoke(Long id) {
-        RefreshToken refreshToken = refreshTokenRepository.findById(id).orElseThrow();
+        RefreshToken refreshToken = getRepository().findById(id).orElseThrow();
         refreshToken.setRevoked(true);
-        refreshTokenRepository.save(refreshToken);
+        getRepository().save(refreshToken);
     }
 
-    public RefreshTokenDTO rotate(Long id, Duration validityDuration) {
+    public RefreshTokenDTO rotate(Long id, Duration validityDuration) throws ResourceNotFoundException {
         revoke(id);
-        RefreshToken oldRefreshToken = refreshTokenRepository.findById(id).orElseThrow(() -> new RuntimeException("RefreshToken not found"));
-        RefreshTokenDTO refreshTokenDTO = refreshTokenMapper.toDto(oldRefreshToken);
+        RefreshToken oldRefreshToken = getRepository().findById(id).orElseThrow(() -> getErrorProvider().notFound(RefreshToken.class.getSimpleName()));
+        RefreshTokenDTO refreshTokenDTO = getMapper().toDto(oldRefreshToken);
         Jwt newRefreshToken = jwtTokenService.generate(refreshTokenDTO.getUser().getUsername(), validityDuration, refreshTokenDTO.getUser().getRoles());
         refreshTokenDTO.setToken(newRefreshToken.getTokenValue());
         createToken(oldRefreshToken.getUser(), newRefreshToken);

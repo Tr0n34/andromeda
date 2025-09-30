@@ -16,7 +16,7 @@ public class ClientService extends AbstractCrudService<ClientDTO, Client, Client
 
     @Autowired
     public ClientService(ClientMapper clientMapper, ClientRepository clientRepository, ErrorProvider errorProvider) {
-        super(clientMapper, clientRepository, Client.class, errorProvider);
+        super(clientMapper, clientRepository, Client.class.getSimpleName(), errorProvider);
     }
 
     @Override

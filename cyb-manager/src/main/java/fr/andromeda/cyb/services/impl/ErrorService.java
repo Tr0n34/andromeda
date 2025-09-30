@@ -18,13 +18,13 @@ public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepo
 
     @Autowired
     public ErrorService(ErrorMapper errorMapper, ErrorRepository errorRepository) {
-        super(errorMapper, errorRepository, Error.class);
+        super(errorMapper, errorRepository, Error.class.getSimpleName());
     }
 
     @Override
     public ErrorDTO findByCode(String code) throws ResourceNotFoundException {
         return getMapper().toDto(getRepository().findByCode(code)
-                .orElseThrow(() -> getErrorProvider().notFound(Error.class)));
+                .orElseThrow(() -> getErrorProvider().notFound(Error.class.getSimpleName())));
     }
 
     @Override
@@ -44,5 +44,9 @@ public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepo
         return 1L;
     }
 
-
+    @Override
+    public List<ErrorDTO> findAllByStatusAndEntityName(HttpStatus status, String entityName) throws ResourceNotFoundException {
+        List<Error> errors = getRepository().findAllByStatusAndEntityName(status, entityName).orElseThrow(() -> getErrorProvider().notFound(entityName));
+        return getMapper().toDtoList(errors);
+    }
 }

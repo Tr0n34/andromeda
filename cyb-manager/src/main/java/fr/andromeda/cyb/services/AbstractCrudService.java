@@ -2,9 +2,9 @@ package fr.andromeda.cyb.services;
 
 import fr.andromeda.cyb.configurations.errors.ErrorProvider;
 import fr.andromeda.cyb.dto.interfaces.IDTO;
-import fr.andromeda.cyb.entites.IEntity;
+import fr.andromeda.cyb.entites.interfaces.IEntity;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
-import fr.andromeda.cyb.mappers.IMapper;
+import fr.andromeda.cyb.mappers.interfaces.IMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,26 +20,26 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
 
     protected final IMapper<D, E> mapper;
     protected final R repository;
-    private final Class<E> entityClass;
+    private final String entityName;
     private final ErrorProvider errorProvider;
 
-    public AbstractCrudService(IMapper<D, E> mapper, R repository, Class<E> entityClass) {
-        this.entityClass = entityClass;
+    public AbstractCrudService(IMapper<D, E> mapper, R repository, String entityName) {
+        this.entityName = entityName;
         this.repository = repository;
         this.mapper = mapper;
         this.errorProvider = null;
     }
 
-    protected AbstractCrudService(IMapper<D, E> mapper, R repository, Class<E> entityClass, ErrorProvider errorProvider) {
+    protected AbstractCrudService(IMapper<D, E> mapper, R repository, String entityName, ErrorProvider errorProvider) {
         this.mapper = mapper;
         this.repository = repository;
-        this.entityClass = entityClass;
+        this.entityName = entityName;
         this.errorProvider = errorProvider;
     }
 
     public D get(ID id) throws ResourceNotFoundException {
         E entity = repository.findById(id)
-                .orElseThrow(() -> errorProvider.notFound(entityClass));
+                .orElseThrow(() -> errorProvider.notFound(entityName));
         logger.debug("get entity with id {}", id);
         return mapper.toDto(entity);
     }
@@ -62,7 +62,7 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
             repository.deleteById(id);
             logger.debug("delete entity with id {}", id);
         } catch (EmptyResultDataAccessException e) {
-            throw errorProvider.notFound(entityClass);
+            throw errorProvider.notFound(entityName);
         }
     }
 
@@ -77,8 +77,8 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
         return mapper.toDtoList(entities);
     }
 
-    public Class<E> getEntityClass() {
-        return entityClass;
+    public String getEntityName() {
+        return entityName;
     }
 
     public R getRepository() {
@@ -95,7 +95,7 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
 
     private E loadEntity(ID id) throws ResourceNotFoundException {
         return repository.findById(id)
-                .orElseThrow(() -> errorProvider.notFound(entityClass));
+                .orElseThrow(() -> errorProvider.notFound(entityName));
     }
 
 }

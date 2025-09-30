@@ -1,9 +1,11 @@
 package fr.andromeda.cyb.exceptions;
 
-public class JwtGenerationException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public JwtGenerationException(String message, Throwable cause) {
-        super(message, cause);
+public class JwtGenerationException extends BusinessException {
+
+    public JwtGenerationException(String code, String message, HttpStatus status) {
+        super(code, message, status);
     }
 
 }
