@@ -9,6 +9,7 @@ import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.oauth2.jwt.JwtEncodingException;
@@ -39,14 +40,23 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class})
-    public ResponseEntity<ErrorDTO> handleHttpMessageNotReadableException(Exception exception) throws ResourceNotFoundException {
+    public ResponseEntity<ApiErrorDTO> handleHttpMessageNotReadableException(Exception exception) throws ResourceNotFoundException {
         logger.error(exception.getMessage(), exception);
-       /* ErrorDTO errorDTO = errorService.findByCode("TC_MESSAGE_NOT_READABLE");
-        InvalidFormatException invalidFormatException = (InvalidFormatException) exception.getCause();
-        errorDTO.setMessage(format(errorDTO.getMessage(),
-                invalidFormatException.getTargetType().getSimpleName(),
-                Arrays.stream(invalidFormatException.getTargetType().getEnumConstants()).map(Object::toString).collect(Collectors.joining(", "))));*/
-        return null;
+        ApiErrorDTO apiErrorDTO = ApiErrorDTOBuilder.create()
+                .setMessage(exception.getMessage())
+                .setStatus(HttpStatus.NOT_IMPLEMENTED)
+                .build();
+        return ResponseEntity.status(apiErrorDTO.getStatus()).body(apiErrorDTO);
+    }
+
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<ApiErrorDTO> handleGenericException(Exception exception) throws ResourceNotFoundException {
+        logger.error(exception.getMessage(), exception);
+        ApiErrorDTO apiErrorDTO = ApiErrorDTOBuilder.create()
+                .setMessage(exception.getMessage())
+                .setStatus(HttpStatus.NOT_IMPLEMENTED)
+                .build();
+        return ResponseEntity.status(apiErrorDTO.getStatus()).body(apiErrorDTO);
     }
 
     private String format(String message, String... placeholders) {

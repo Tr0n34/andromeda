@@ -21,16 +21,4 @@ public class RoleService extends AbstractCrudService<RoleDTO, Role, RoleReposito
         super(mapper, repository, RoleService.class.getSimpleName(), errorProvider);
     }
 
-    public void createAll(List<RoleDTO> roleDTOs) {
-        getRepository().saveAll(roleDTOs.stream()
-                .map(getMapper()::toEntity)
-                .toList());
-    }
-
-    public List<RoleDTO> findAll() {
-        return getRepository().findAll().stream()
-                .map(getMapper()::toDto)
-                .toList();
-    }
-
 }

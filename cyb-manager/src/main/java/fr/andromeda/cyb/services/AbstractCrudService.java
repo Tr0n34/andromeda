@@ -1,10 +1,12 @@
 package fr.andromeda.cyb.services;
 
 import fr.andromeda.cyb.configurations.errors.ErrorProvider;
+import fr.andromeda.cyb.dto.RoleDTO;
 import fr.andromeda.cyb.dto.interfaces.IDTO;
 import fr.andromeda.cyb.entites.interfaces.IEntity;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.mappers.interfaces.IMapper;
+import fr.andromeda.cyb.services.interfaces.ICrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R extends JpaRepository<E, ID>, ID> {
+public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R extends JpaRepository<E, ID>, ID> implements ICrudService<D, E,R, ID> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractCrudService.class);
 
@@ -77,6 +79,12 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
         return mapper.toDtoList(entities);
     }
 
+    public void createAll(List<D> dtos) {
+        getRepository().saveAll(dtos.stream()
+                .map(getMapper()::toEntity)
+                .toList());
+    }
+
     public String getEntityName() {
         return entityName;
     }
@@ -93,9 +101,8 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
         return errorProvider;
     }
 
-    private E loadEntity(ID id) throws ResourceNotFoundException {
-        return repository.findById(id)
-                .orElseThrow(() -> errorProvider.notFound(entityName));
+    public E loadEntity(ID id) throws ResourceNotFoundException {
+        return repository.findById(id).orElseThrow(() -> errorProvider.notFound(entityName));
     }
 
 }

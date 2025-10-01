@@ -1,6 +1,8 @@
 package fr.andromeda.cyb.controllers;
 
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
+import fr.andromeda.cyb.enums.UrlPattern;
+import fr.andromeda.cyb.enums.Urls;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.services.impl.ErrorService;
 import org.slf4j.Logger;
@@ -30,8 +32,8 @@ public class ErrorController {
     public ResponseEntity<Void> createError(@RequestBody ErrorDTO errorDTO) throws ResourceNotFoundException {
         ErrorDTO saved = errorService.create(errorDTO);
         logger.debug("error {} created", saved.getId());
-        URI location = ServletUriComponentsBuilder.fromPath("/api/v1/errors")
-                .path("/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path(UrlPattern.ID.getPath())
                 .buildAndExpand(saved.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
@@ -43,9 +45,15 @@ public class ErrorController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(path = Urls.PATH_ID)
     public ResponseEntity<Void> updateError(@PathVariable("id") Long id, @RequestBody ErrorDTO errorDTO) throws ResourceNotFoundException {
         errorService.update(id, errorDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(path = Urls.PATH_ID)
+    public ResponseEntity<Void> deleteError(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        errorService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

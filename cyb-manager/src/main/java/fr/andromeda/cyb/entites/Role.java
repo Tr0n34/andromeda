@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_roles_authority", columnNames = "authority")
+})
 public class Role extends AuditableEntity implements IEntity, GrantedAuthority {
 
     @Id

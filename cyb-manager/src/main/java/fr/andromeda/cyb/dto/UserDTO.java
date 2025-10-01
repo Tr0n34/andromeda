@@ -20,6 +20,7 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
     private String email;
     private boolean locked;
     private Set<RoleDTO> roles;
+    private boolean credentialsNonExpired;
     private LocalDateTime expiredOn;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
@@ -62,6 +63,12 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
 
     public UserDTO setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+
+    public UserDTO setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
         return this;
     }
 
@@ -117,7 +124,7 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
     public boolean isAccountNonExpired() {
         boolean isExpired = false;
         LocalDateTime now = LocalDateTime.now();
-        if ( expiredOn == null || expiredOn.isAfter(LocalDateTime.now())) {
+        if ( expiredOn == null || expiredOn.isBefore(LocalDateTime.now())) {
             isExpired = true;
         }
         return !isExpired;
@@ -130,7 +137,7 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !isAccountNonExpired();
+        return isAccountNonExpired();
     }
 
     @Override

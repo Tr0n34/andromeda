@@ -6,12 +6,14 @@ import fr.andromeda.cyb.dto.UserDTO;
 import fr.andromeda.cyb.entites.Role;
 import fr.andromeda.cyb.entites.User;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
+import fr.andromeda.cyb.mappers.RoleMapper;
 import fr.andromeda.cyb.mappers.UserMapper;
-import fr.andromeda.cyb.repositories.RoleRepository;
 import fr.andromeda.cyb.repositories.UserRepository;
 import fr.andromeda.cyb.services.AbstractCrudService;
 import fr.andromeda.cyb.services.business.UserValidatorService;
 import fr.andromeda.cyb.services.interfaces.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,17 +24,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService extends AbstractCrudService<UserDTO, User, UserRepository, Long> implements IUserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private final PasswordEncoder passwordEncoder;
     private final UserValidatorService userValidatorService;
     private final RoleService roleService;
     private final UserRepository userRepository;
+
 
     @Autowired
     public UserService(UserRepository userRepository,
@@ -40,7 +44,7 @@ public class UserService extends AbstractCrudService<UserDTO, User, UserReposito
                        UserValidatorService userValidatorService,
                        UserMapper userMapper,
                        PasswordEncoder passwordEncoder,
-                       ErrorProvider errorProvider, UserRepository userRepository1) {
+                       ErrorProvider errorProvider) {
         super(userMapper, userRepository, User.class.getSimpleName(), errorProvider);
         this.userValidatorService = userValidatorService;
         this.passwordEncoder = passwordEncoder;
@@ -51,18 +55,30 @@ public class UserService extends AbstractCrudService<UserDTO, User, UserReposito
     @Override
     public UserDTO create(UserDTO userDTO) throws ResourceNotFoundException {
         User newUser = getMapper().toEntity(userDTO);
-        newUser.setRoles(Collections.emptySet());
-        List<RoleDTO> roles = roleService.findAll();
-        userValidatorService.validateAuthoritiesExist(userDTO.getRoles(), roles);
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        Set<RoleDTO> rolesToAssign = userDTO.getRoles().stream()
-                .map(dto -> roles.stream()
-                        .filter(r -> r.getAuthority().equals(dto.getAuthority()))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("Role not found")))
-                .collect(Collectors.toSet());
-        userDTO.setRoles(rolesToAssign);
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        newUser.setRoles(resolveRolesFromDto(userDTO));
         return getMapper().toDto(userRepository.save(newUser));
+    }
+
+    @Override
+    public void patch(Long id, UserDTO userDTO) throws ResourceNotFoundException {
+        User user = loadEntity(id);
+        getMapper().patchFromDto(userDTO, user);
+        if ( userDTO.getRoles() != null ) {
+            user.setRoles(resolveRolesFromDto(userDTO));
+            userRepository.save(user);
+        } else {
+            super.patch(id, userDTO);
+        }
+    }
+
+    @Override
+    public Set<Role> resolveRolesFromDto(UserDTO userDTO) throws ResourceNotFoundException {
+        return userDTO.getRoles().stream()
+                .map(r -> roleService.getRepository()
+                        .findByAuthority(r.getAuthority())
+                        .orElseThrow(() -> getErrorProvider().notFound(Role.class.getSimpleName())))
+                .collect(Collectors.toSet());
     }
 
     public void lock(Long id) {
@@ -81,6 +97,28 @@ public class UserService extends AbstractCrudService<UserDTO, User, UserReposito
 
     public boolean isExpired(Jwt token) {
         return token != null && token.getExpiresAt() != null && token.getExpiresAt().isAfter(Instant.now());
+    }
+
+    private void attachEntityRoleTo(User user, Set<RoleDTO> roles) {
+        user.setRoles(
+                roles.stream()
+                        .map(r -> roleService.getRepository().findByAuthority(r.getAuthority()).orElseThrow(() -> new RuntimeException("Role not found")))
+                        .collect(Collectors.toSet())
+        );
+    }
+
+    private void detachEntityRoleFrom(User user) {
+        user.setRoles(Collections.emptySet());
+        logger.debug("Role Entity detached from User Entity to avoid creation of a new Role");
+    }
+
+    private Set<RoleDTO> assignRoles(UserDTO userDTO, List<RoleDTO> availableRoles) {
+        return userDTO.getRoles().stream()
+                .map(dto -> availableRoles.stream()
+                        .filter(r -> r.getAuthority().equals(dto.getAuthority()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Role not found")))
+                .collect(Collectors.toSet());
     }
 
 }

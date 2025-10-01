@@ -2,7 +2,7 @@ package fr.andromeda.cyb.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class BusinessException extends Exception {
+public class BusinessException extends RuntimeException {
 
     private HttpStatus status;
     private String code;

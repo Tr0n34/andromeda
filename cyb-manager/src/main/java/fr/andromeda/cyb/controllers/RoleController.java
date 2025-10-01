@@ -4,6 +4,7 @@ import fr.andromeda.cyb.dto.RoleDTO;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
 import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.services.impl.RoleService;
+import fr.andromeda.cyb.services.interfaces.IRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,9 @@ public class RoleController {
 
     private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
-    private RoleService roleService;
+    private IRoleService roleService;
 
-    public RoleController(RoleService roleService) {
+    public RoleController(IRoleService roleService) {
         this.roleService = roleService;
     }
 
@@ -43,8 +44,14 @@ public class RoleController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateError(@PathVariable("id") Long id, @RequestBody RoleDTO roleDTO) throws ResourceNotFoundException {
+    public ResponseEntity<Void> patchRole(@PathVariable("id") Long id, @RequestBody RoleDTO roleDTO) throws ResourceNotFoundException {
         roleService.patch(id, roleDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        roleService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

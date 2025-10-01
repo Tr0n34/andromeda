@@ -19,8 +19,10 @@ public interface IMapper<D extends IDTO, E extends IEntity> {
 
     List<D> toDtoList(List<E> entites);
 
-    @Mapping(target = "id", ignore = true)
+    List<E> toEntityList(List<D> dtos);
+
+    //@Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void patchFromDto(D dto, @MappingTarget E entity);
+    E patchFromDto(D dto, @MappingTarget E entity);
 
 }

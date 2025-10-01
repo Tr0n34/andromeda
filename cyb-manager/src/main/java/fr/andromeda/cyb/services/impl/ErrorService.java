@@ -28,20 +28,8 @@ public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepo
     }
 
     @Override
-    public void createAll(List<ErrorDTO> errorDTOs) {
-        getRepository().saveAll(errorDTOs.stream()
-            .map(getMapper()::toEntity)
-            .toList());
-    }
-
-    @Override
     public ErrorDTO findByHttpStatus(HttpStatus status) {
         return null;
-    }
-
-    @Override
-    public Long add(ErrorDTO errorDTO) {
-        return 1L;
     }
 
     @Override
@@ -49,4 +37,5 @@ public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepo
         List<Error> errors = getRepository().findAllByStatusAndEntityName(status, entityName).orElseThrow(() -> getErrorProvider().notFound(entityName));
         return getMapper().toDtoList(errors);
     }
+
 }
