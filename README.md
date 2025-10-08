@@ -1,3 +1,5 @@
+data-extraction
+---------------------------------
 Requirements 
 
 https://github.com/Tr0n34/skandika-connector : scrap data from a skandika bluetooth machine
@@ -13,3 +15,17 @@ Install
 Download https://github.com/Tr0n34/skandika-connector (python)
 Launch springboot andromeda/data-extractor
 Execute run-scrap.py
+
+auth
+---------------------------------
+OAuth2 authentication microservice
+Dockerisation in progress
+
+cyb-manager
+---------------------------------
+cybercoffee manager microservice
+Dockerisation done
+
+andromeda-api
+---------------------------------
+specific transversal spring components + interfaces
