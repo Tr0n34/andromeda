@@ -1,6 +1,8 @@
 package fr.andromeda.cyb.entites;
 
-import fr.andromeda.cyb.entites.authentication.RefreshToken;
+import fr.andromeda.api.entities.AuditableEntity;
+import fr.andromeda.api.entities.IEntity;
+import fr.andromeda.cyb.entites.auth.RefreshToken;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements IEntity {
+public class User extends AuditableEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +35,6 @@ public class User implements IEntity {
     @Column(name = "locked", nullable = false)
     @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
     private Boolean locked;
-    private LocalDateTime createdOn;
     private LocalDateTime expiredOn;
 
     public Long getId() {
@@ -96,15 +97,6 @@ public class User implements IEntity {
 
     public User setLocked(boolean locked) {
         this.locked = locked;
-        return this;
-    }
-
-    public LocalDateTime getCreatedOn() {
-        return createdOn;
-    }
-
-    public User setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
         return this;
     }
 

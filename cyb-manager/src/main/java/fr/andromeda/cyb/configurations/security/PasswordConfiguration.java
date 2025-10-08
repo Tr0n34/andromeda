@@ -1,6 +1,5 @@
 package fr.andromeda.cyb.configurations.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,15 +12,12 @@ import static java.time.Duration.*;
 @Configuration
 public class PasswordConfiguration {
 
-    @Value("${account.password.expiration.policy}")
     private PasswordExpirationPolicy passwordExpirationPolicy;
-
-    @Value("${account.password.expiration.duration:INFINITE}")
     private Long passwordExpirationDuration;
 
     @Bean
     public PasswordExpiration  passwordExpiration() {
-        return new PasswordExpiration(passwordExpirationPolicy, passwordExpirationDuration);
+        return new PasswordExpiration(PasswordExpirationPolicy.MINUTES, 500L);
     }
 
     @Bean

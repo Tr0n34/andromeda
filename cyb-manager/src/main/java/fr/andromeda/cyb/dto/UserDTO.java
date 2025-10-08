@@ -1,6 +1,8 @@
 package fr.andromeda.cyb.dto;
 
-import fr.andromeda.cyb.dto.interfaces.IDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.andromeda.api.dto.AuditableDTO;
+import fr.andromeda.api.dto.IDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
-public class UserDTO implements UserDetails, IDTO {
+public class UserDTO implements UserDetails, IDTO, AuditableDTO {
 
     private Long id;
     private String username;
@@ -18,8 +20,10 @@ public class UserDTO implements UserDetails, IDTO {
     private String email;
     private boolean locked;
     private Set<RoleDTO> roles;
-    private LocalDateTime createdOn;
+    private boolean credentialsNonExpired;
     private LocalDateTime expiredOn;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
 
     public Long getId() {
         return id;
@@ -62,30 +66,17 @@ public class UserDTO implements UserDetails, IDTO {
         return this;
     }
 
+    public UserDTO setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+        return this;
+    }
+
     public boolean isLocked() {
         return locked;
     }
 
     public UserDTO setLocked(boolean locked) {
         this.locked = locked;
-        return this;
-    }
-
-    public Set<RoleDTO> getRoles() {
-        return roles;
-    }
-
-    public UserDTO setRoles(Set<RoleDTO> roles) {
-        this.roles = roles;
-        return this;
-    }
-
-    public LocalDateTime getCreatedOn() {
-        return createdOn;
-    }
-
-    public UserDTO setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
         return this;
     }
 
@@ -98,9 +89,19 @@ public class UserDTO implements UserDetails, IDTO {
         return this;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+
+    public Set<RoleDTO> getRoles() {
+        return roles;
+    }
+
+    public UserDTO setRoles(Set<RoleDTO> roles) {
+        this.roles = roles;
+        return this;
     }
 
     @Override
@@ -122,7 +123,7 @@ public class UserDTO implements UserDetails, IDTO {
     public boolean isAccountNonExpired() {
         boolean isExpired = false;
         LocalDateTime now = LocalDateTime.now();
-        if ( expiredOn == null || expiredOn.isAfter(LocalDateTime.now())) {
+        if ( expiredOn == null || expiredOn.isBefore(LocalDateTime.now())) {
             isExpired = true;
         }
         return !isExpired;
@@ -135,12 +136,32 @@ public class UserDTO implements UserDetails, IDTO {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !isAccountNonExpired();
+        return isAccountNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
         return !locked;
+    }
+
+    @Override
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
+    }
+
+    public UserDTO setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    @Override
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public UserDTO setUpdatedOn(LocalDateTime updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
     }
 
 }

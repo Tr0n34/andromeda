@@ -1,0 +1,6 @@
+[
+  { "authority": "ROLE_ADMIN" },
+  { "authority": "ROLE_USER" },
+  { "authority": "ROLE_CLIENT" },
+  { "authority": "ROLE_AUDIT" }
+]

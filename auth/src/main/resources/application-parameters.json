@@ -1,0 +1,6 @@
+[
+  { "type":  "REFRESH_TOKEN_DURATION", "value":  "" },
+  { "type":  "ACCESS_TOKEN_DURATION", "value":  "" },
+  { "type":  "PASSWORD_EXPIRATION_POLICY", "value":  "MONTH" },
+  { "type":  "PASSWORD_EXPIRATION_DURATION", "value": 6 }
+]

@@ -1,0 +1,23 @@
+$env:Path += ";D:\PROG\zulu21.44.17-ca-jdk21.0.8-win_x64\bin"
+
+# Variables
+$alias = "jwt"
+$keystore = "keystore.jks"
+$storepass = "andromeda"
+$keypass = "andromeda"
+$keyalg = "RSA"
+$keysize = 2048
+$validity = 3650
+$dn = "CN=localhost, OU=Dev, O=Andromeda, C=FR"
+
+keytool -genkeypair `
+    -alias $alias `
+    -keyalg $keyalg `
+    -keysize $keysize `
+    -validity $validity `
+    -keystore $keystore `
+    -storepass $storepass `
+    -keypass $keypass `
+    -dname $dn
+
+Write-Host "Keystore généré : $keystore"
