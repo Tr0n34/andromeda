@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.services.interfaces;
 
+import fr.andromeda.api.services.interfaces.ICrudService;
 import fr.andromeda.cyb.dto.RoleDTO;
 import fr.andromeda.cyb.entites.Role;
 import fr.andromeda.cyb.repositories.RoleRepository;

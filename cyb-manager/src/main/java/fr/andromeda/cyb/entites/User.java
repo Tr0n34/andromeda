@@ -1,8 +1,8 @@
 package fr.andromeda.cyb.entites;
 
+import fr.andromeda.api.entities.AuditableEntity;
+import fr.andromeda.api.entities.IEntity;
 import fr.andromeda.cyb.entites.auth.RefreshToken;
-import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
-import fr.andromeda.cyb.entites.interfaces.IEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

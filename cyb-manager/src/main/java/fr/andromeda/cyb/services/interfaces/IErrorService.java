@@ -1,7 +1,7 @@
 package fr.andromeda.cyb.services.interfaces;
 
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;

@@ -1,12 +1,10 @@
 package fr.andromeda.cyb.dto;
 
-import fr.andromeda.cyb.dto.interfaces.AuditableDTO;
-import fr.andromeda.cyb.dto.interfaces.IDTO;
+import fr.andromeda.api.dto.AuditableDTO;
+import fr.andromeda.api.dto.IDTO;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 public class RoleDTO implements IDTO, GrantedAuthority, AuditableDTO {
 

@@ -1,7 +1,7 @@
 package fr.andromeda.cyb.entites;
 
-import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
-import fr.andromeda.cyb.entites.interfaces.IEntity;
+import fr.andromeda.api.entities.AuditableEntity;
+import fr.andromeda.api.entities.IEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,11 +11,12 @@ public class Client extends AuditableEntity  implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, unique = true)
+    private String username;
     private String lastName;
     private String firstName;
     @Column(nullable = true)
     private String email;
-
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private ActiveSubscription activeSubscription;
 

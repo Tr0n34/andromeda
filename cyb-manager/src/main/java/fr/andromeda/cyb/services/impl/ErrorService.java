@@ -1,11 +1,11 @@
 package fr.andromeda.cyb.services.impl;
 
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
+import fr.andromeda.api.services.interfaces.AbstractCrudService;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
 import fr.andromeda.cyb.entites.errors.Error;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.mappers.ErrorMapper;
 import fr.andromeda.cyb.repositories.ErrorRepository;
-import fr.andromeda.cyb.services.AbstractCrudService;
 import fr.andromeda.cyb.services.interfaces.IErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepository, Long>  implements IErrorService {
+public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepository, Long> implements IErrorService {
 
     @Autowired
     public ErrorService(ErrorMapper errorMapper, ErrorRepository errorRepository) {

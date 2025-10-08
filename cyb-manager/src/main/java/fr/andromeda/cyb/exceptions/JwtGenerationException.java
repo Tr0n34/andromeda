@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.exceptions;
 
+import fr.andromeda.api.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
 
 public class JwtGenerationException extends BusinessException {

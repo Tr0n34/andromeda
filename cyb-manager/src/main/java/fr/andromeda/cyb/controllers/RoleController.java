@@ -1,9 +1,8 @@
 package fr.andromeda.cyb.controllers;
 
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.dto.RoleDTO;
-import fr.andromeda.cyb.dto.errors.ErrorDTO;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
-import fr.andromeda.cyb.services.impl.RoleService;
+import fr.andromeda.cyb.enums.Urls;
 import fr.andromeda.cyb.services.interfaces.IRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,13 +42,23 @@ public class RoleController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
+    @GetMapping(Urls.PATH_ID)
+    public ResponseEntity<RoleDTO> getRole(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        return ResponseEntity.ok(roleService.get(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoleDTO>> getAllRoles() {
+        return ResponseEntity.ok(roleService.findAll());
+    }
+
+    @PatchMapping(Urls.PATH_ID )
     public ResponseEntity<Void> patchRole(@PathVariable("id") Long id, @RequestBody RoleDTO roleDTO) throws ResourceNotFoundException {
         roleService.patch(id, roleDTO);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(Urls.PATH_ID )
     public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) throws ResourceNotFoundException {
         roleService.delete(id);
         return ResponseEntity.noContent().build();

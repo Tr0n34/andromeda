@@ -1,15 +1,14 @@
 package fr.andromeda.cyb.services.impl;
 
-import fr.andromeda.cyb.configurations.errors.ErrorProvider;
+import fr.andromeda.api.errors.ErrorProvider;
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
+import fr.andromeda.api.services.interfaces.AbstractCrudService;
 import fr.andromeda.cyb.dto.RoleDTO;
 import fr.andromeda.cyb.dto.UserDTO;
 import fr.andromeda.cyb.entites.Role;
 import fr.andromeda.cyb.entites.User;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
-import fr.andromeda.cyb.mappers.RoleMapper;
 import fr.andromeda.cyb.mappers.UserMapper;
 import fr.andromeda.cyb.repositories.UserRepository;
-import fr.andromeda.cyb.services.AbstractCrudService;
 import fr.andromeda.cyb.services.business.UserValidatorService;
 import fr.andromeda.cyb.services.interfaces.IUserService;
 import org.slf4j.Logger;
@@ -81,8 +80,18 @@ public class UserService extends AbstractCrudService<UserDTO, User, UserReposito
                 .collect(Collectors.toSet());
     }
 
+    @Override
     public void lock(Long id) {
+        super.patch(id, locked(true));
+    }
 
+    @Override
+    public void unlock(Long id) {
+        super.patch(id, locked(false));
+    }
+
+    private UserDTO locked(boolean lock) {
+        return new UserDTO().setLocked(lock);
     }
 
     @Transactional

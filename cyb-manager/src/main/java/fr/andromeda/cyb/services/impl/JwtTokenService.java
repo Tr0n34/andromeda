@@ -1,94 +1,84 @@
 package fr.andromeda.cyb.services.impl;
 
 import fr.andromeda.cyb.dto.RoleDTO;
-import jakarta.servlet.http.Cookie;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.jwt.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.Instant;
+import java.util.Date;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+@Service
 public class JwtTokenService {
 
+    @Value("${api.jwt.access-token-validity-ms:900000}")
+    private long accessTokenValidityMs;
+    @Value("${api.jwt.refresh-token-validity-ms:604800000}")
+    private long refreshTokenValidityMs;
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
+    private final SecretKey key;
 
-    public static final Duration ACCESS_TOKEN_VALID_MS = Duration.ofSeconds(1000L * 60 * 15);
-    public static final Duration REFRESH_TOKEN_VALID_MS = Duration.ofSeconds(1000L * 60 * 60 * 24 * 7);
-
-    public static final String ALGORITHM = "HmacSHA256";
-    public static final String CLAIM_ROLES = "roles";
-    public static final String ISSUER = "self";
-    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
-
-    private final JwtDecoder jwtDecoder;
-    private final JwtEncoder jwtEncoder;
-
-    public JwtTokenService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
-        this.jwtEncoder = jwtEncoder;
-        this.jwtDecoder = jwtDecoder;
+    @Autowired
+    public JwtTokenService(@Value("${api.jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public JwtDecoder getJwtDecoder() {
-        return jwtDecoder;
+    public String generateAccessToken(String username, Set<RoleDTO> roles) {
+        Map<String, Object> claims = Map.of(
+                "roles", roles.stream().map(RoleDTO::getAuthority).collect(Collectors.toList())
+        );
+        return generateToken(claims, username, accessTokenValidityMs);
     }
 
-    public JwtEncoder getJwtEncoder() {
-        return jwtEncoder;
+    public String generateRefreshToken(String username) {
+        return generateToken(Map.of(), username, refreshTokenValidityMs);
     }
 
-    public Jwt decode(String token) {
-        return jwtDecoder.decode(token);
+    private String generateToken(Map<String, Object> claims, String subject, long validityMs) {
+        long now = System.currentTimeMillis();
+        return Jwts.builder()
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date(now))
+                .expiration(new Date(now + validityMs))
+                .signWith(key)
+                .compact();
     }
 
-    public Jwt generate(String username, Duration validityDuration, Set<RoleDTO> roles) {
-        checkUsername(username);
-        checkRoles(roles);
-        Instant now = Instant.now();
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer(ISSUER)
-                .issuedAt(now)
-                .expiresAt(now.plusSeconds(validityDuration.toSeconds()))
-                .subject(username)
-                .claim(CLAIM_ROLES, roles)
-                .build();
-        logger.debug("JWT Token expired At {}", claims.getExpiresAt());
-        return jwtEncoder.encode(JwtEncoderParameters.from(claims));
+    public boolean isValid(String token) {
+        boolean isValid = false;
+        decode(token);
+        return isValid;
     }
 
-    public void checkRoles(Set<RoleDTO> roles) {
-        if ( roles == null || roles.isEmpty() ) {
-            throw new AuthorizationDeniedException("no role are defined (null or empty)");
+    public Claims decode(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String getUsername(String token) {
+        return decode(token).getSubject();
+    }
+
+    public Set<String> getRoles(String token) {
+        Object roles = decode(token).get("roles");
+        if (roles instanceof java.util.List<?> list) {
+            return list.stream()
+                    .filter(String.class::isInstance)
+                    .map(String.class::cast)
+                    .collect(Collectors.toSet());
         }
-    }
-
-    public void checkUsername(String username) {
-        if ( username == null || username.isEmpty() ) {
-            throw new UsernameNotFoundException("username : {} cannot be null or empty");
-        }
-    }
-
-    public boolean isValid(String secret, String token) {
-        SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), ALGORITHM);
-        JwtDecoder decoder = NimbusJwtDecoder.withSecretKey(secretKey).build();
-        return decoder.decode(token) != null;
-    }
-
-
-    public Cookie secureCookieFrom(Jwt token) {
-        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, token.getTokenValue());
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/api/v1/auth/refresh");
-        cookie.setMaxAge(REFRESH_TOKEN_VALID_MS.getNano() / 1000);
-        cookie.setAttribute("SameSite", "Strict");
-        return cookie;
+        return Set.of();
     }
 
 }

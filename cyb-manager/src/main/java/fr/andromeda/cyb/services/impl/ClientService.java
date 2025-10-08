@@ -1,12 +1,12 @@
 package fr.andromeda.cyb.services.impl;
 
-import fr.andromeda.cyb.configurations.errors.ErrorProvider;
+import fr.andromeda.api.errors.ErrorProvider;
+import fr.andromeda.api.services.interfaces.AbstractCrudService;
 import fr.andromeda.cyb.dto.ActiveSubscriptionDTO;
 import fr.andromeda.cyb.dto.ClientDTO;
 import fr.andromeda.cyb.entites.Client;
 import fr.andromeda.cyb.mappers.ClientMapper;
 import fr.andromeda.cyb.repositories.ClientRepository;
-import fr.andromeda.cyb.services.AbstractCrudService;
 import fr.andromeda.cyb.services.interfaces.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

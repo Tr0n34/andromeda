@@ -2,8 +2,6 @@ package fr.andromeda.cyb.dto.errors;
 
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
-
 public class ApiErrorDTOBuilder {
 
     private HttpStatus status;

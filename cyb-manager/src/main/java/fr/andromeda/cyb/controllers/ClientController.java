@@ -1,15 +1,16 @@
 package fr.andromeda.cyb.controllers;
 
 import fr.andromeda.cyb.dto.ClientDTO;
+import fr.andromeda.cyb.enums.Urls;
 import fr.andromeda.cyb.services.interfaces.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController()
+@RequestMapping(path = "${api.prefix}/clients")
 public class ClientController {
 
     private IClientService IClientService;
@@ -24,7 +25,7 @@ public class ClientController {
         return null;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(Urls.PATH_ID )
     public ResponseEntity<ClientDTO> getClientById(@PathVariable("id") Long id) {
         return null;
     }
@@ -34,12 +35,12 @@ public class ClientController {
         return null;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(Urls.PATH_ID )
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody ClientDTO updatedClient) {
         return null;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(Urls.PATH_ID )
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
         return ResponseEntity.noContent().build();
     }

@@ -1,11 +1,9 @@
 package fr.andromeda.cyb.configurations.errors;
 
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.dto.errors.ApiErrorDTO;
 import fr.andromeda.cyb.dto.errors.ApiErrorDTOBuilder;
-import fr.andromeda.cyb.dto.errors.ErrorDTO;
-import fr.andromeda.cyb.exceptions.BusinessException;
 import fr.andromeda.cyb.exceptions.JwtGenerationException;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,7 @@ public class GlobalErrorHandler {
         ApiErrorDTO apiErrorDTO = ApiErrorDTOBuilder.create()
                 .setCode(exception.getCode())
                 .setMessage(exception.getMessage())
-                .setStatus((exception.getStatus()))
+                .setStatus(exception.getStatus())
                 .setEntityName(exception.getEntityName())
                 .build();
         return ResponseEntity.status(apiErrorDTO.getStatus()).body(apiErrorDTO);

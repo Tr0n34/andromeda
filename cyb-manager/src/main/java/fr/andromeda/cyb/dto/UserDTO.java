@@ -1,8 +1,8 @@
 package fr.andromeda.cyb.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.andromeda.cyb.dto.interfaces.AuditableDTO;
-import fr.andromeda.cyb.dto.interfaces.IDTO;
+import fr.andromeda.api.dto.AuditableDTO;
+import fr.andromeda.api.dto.IDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -65,7 +65,6 @@ public class UserDTO implements UserDetails, IDTO, AuditableDTO {
         this.email = email;
         return this;
     }
-
 
     public UserDTO setCredentialsNonExpired(boolean credentialsNonExpired) {
         this.credentialsNonExpired = credentialsNonExpired;

@@ -1,6 +1,6 @@
 package fr.andromeda.cyb.services.business;
 
-import fr.andromeda.cyb.configurations.errors.ErrorProvider;
+import fr.andromeda.api.errors.ErrorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

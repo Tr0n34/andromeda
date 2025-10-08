@@ -1,9 +1,9 @@
 package fr.andromeda.cyb.controllers;
 
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.dto.UserDTO;
 import fr.andromeda.cyb.enums.UrlPattern;
 import fr.andromeda.cyb.enums.Urls;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.services.impl.UserService;
 import fr.andromeda.cyb.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/users")
@@ -29,7 +30,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws ResourceNotFoundException {
         UserDTO newUserDTO = userService.create(userDTO);
-        URI location = ServletUriComponentsBuilder.fromPath("/api/v1/users")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path(UrlPattern.ID.getPath())
                 .buildAndExpand(newUserDTO.getId())
                 .toUri();
@@ -40,6 +41,23 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) throws ResourceNotFoundException {
         UserDTO userDTO = userService.get(id);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
+    @PatchMapping(path = Urls.PATH_ID + "/lock")
+    public ResponseEntity<?> lockUser(@PathVariable Long id) throws ResourceNotFoundException {
+        userService.lock(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(path = Urls.PATH_ID + "/unlock")
+    public ResponseEntity<?> unlockUser(@PathVariable Long id) throws ResourceNotFoundException {
+        userService.unlock(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(path = Urls.PATH_ID)

@@ -22,6 +22,13 @@
 
     <dependencies>
 
+        <!-- API Andromede -->
+        <dependency>
+            <groupId>fr.andromeda</groupId>
+            <artifactId>andromeda-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -64,10 +71,6 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.12.6</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
 
         <!-- Database -->

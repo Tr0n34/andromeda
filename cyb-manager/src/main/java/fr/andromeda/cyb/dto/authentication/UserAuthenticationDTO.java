@@ -1,6 +1,6 @@
 package fr.andromeda.cyb.dto.authentication;
 
-import fr.andromeda.cyb.dto.interfaces.IDTO;
+import fr.andromeda.api.dto.IDTO;
 
 public class UserAuthenticationDTO implements IDTO {
 

@@ -1,8 +1,9 @@
 package fr.andromeda.cyb.configurations.errors;
 
+import fr.andromeda.api.errors.ErrorProvider;
+import fr.andromeda.api.exceptions.BusinessException;
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
-import fr.andromeda.cyb.exceptions.BusinessException;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.services.impl.ErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,9 @@ public class ErrorProviderImpl implements ErrorProvider {
     }
 
     @Override
-    public BusinessException getException(String code, HttpStatus status, String entityName) {
+    public BusinessException getException(String code, int status, String entityName) {
         try {
-            return errorService.findAllByStatusAndEntityName(status, entityName)
+            return errorService.findAllByStatusAndEntityName(HttpStatus.valueOf(status), entityName)
                     .stream()
                     .filter(dto -> dto.getCode().equals(code))
                     .findFirst()

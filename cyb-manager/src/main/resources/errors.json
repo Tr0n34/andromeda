@@ -4,3 +4,7 @@
   { "code": "BS_JWT_GENERATION", "message": "Jwt error token generation", "status": "UNAUTHORIZED", "entityName": "RefreshToken" },
   { "code": "BS_NO_ROLE", "message":  "no role are defined (null or empty)", "status":  "UNAUTHORIZED", "entityName": "Role"}
 ]
+
+
+ProxyPass /web-local/swagger-ui/ https://lc2.dev.sages2.fr/sages2-web-local/swagger-ui
+ProxyPassReverse /web-local/swagger-ui/ https://lc2.dev.sages2.fr/sages2-web-local/swagger-ui

@@ -1,9 +1,9 @@
 package fr.andromeda.cyb.controllers;
 
+import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
 import fr.andromeda.cyb.enums.UrlPattern;
 import fr.andromeda.cyb.enums.Urls;
-import fr.andromeda.cyb.exceptions.ResourceNotFoundException;
 import fr.andromeda.cyb.services.impl.ErrorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +43,16 @@ public class ErrorController {
     public ResponseEntity<Void> createErrors(@RequestBody List<ErrorDTO> errorDTOList) {
         errorService.createAll(errorDTOList);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ErrorDTO>> getAllErrors() {
+        return ResponseEntity.ok(errorService.findAll());
+    }
+
+    @GetMapping(Urls.PATH_ID)
+    public ResponseEntity<ErrorDTO> getError(@PathVariable Long id) {
+        return ResponseEntity.ok(errorService.get(id));
     }
 
     @PatchMapping(path = Urls.PATH_ID)

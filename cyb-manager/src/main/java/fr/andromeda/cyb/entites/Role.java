@@ -1,7 +1,7 @@
 package fr.andromeda.cyb.entites;
 
-import fr.andromeda.cyb.entites.interfaces.AuditableEntity;
-import fr.andromeda.cyb.entites.interfaces.IEntity;
+import fr.andromeda.api.entities.AuditableEntity;
+import fr.andromeda.api.entities.IEntity;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 

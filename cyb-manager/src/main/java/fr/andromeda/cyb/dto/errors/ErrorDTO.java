@@ -1,7 +1,7 @@
 package fr.andromeda.cyb.dto.errors;
 
-import fr.andromeda.cyb.dto.interfaces.AuditableDTO;
-import fr.andromeda.cyb.dto.interfaces.IDTO;
+import fr.andromeda.api.dto.AuditableDTO;
+import fr.andromeda.api.dto.IDTO;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;

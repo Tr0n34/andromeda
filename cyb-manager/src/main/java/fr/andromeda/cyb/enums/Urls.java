@@ -6,6 +6,6 @@ public final class Urls {
 
     }
 
-    public static final String PATH_ID = "/{id}";
+    public static final String PATH_ID = "/{id:[0-9]+}";
 
 }
