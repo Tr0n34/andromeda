@@ -3,6 +3,7 @@ package fr.andromeda.auth.services.impl;
 import fr.andromeda.auth.entities.OAuth2AuthorizationEntity;
 import fr.andromeda.auth.entities.RegisteredClientEntity;
 import fr.andromeda.auth.mappers.OAuth2AuthorizationMapper;
+import fr.andromeda.auth.mappers.RegisteredClientConverter;
 import fr.andromeda.auth.mappers.RegisteredClientMapper;
 import fr.andromeda.auth.repositories.OAuth2AuthorizationRepository;
 import fr.andromeda.auth.repositories.AuthRegisteredClientRepository;
@@ -21,18 +22,18 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
 
     private final OAuth2AuthorizationRepository oAuth2AuthorizationRepository;
     private final OAuth2AuthorizationMapper authorizationMapper;
-    private final RegisteredClientMapper registeredClientMapper;
     private final AuthRegisteredClientRepository registeredClientRepository;
+    private final RegisteredClientConverter registeredClientConverter;
 
     @Autowired
     public JpaOAuth2AuthorizationService(AuthRegisteredClientRepository registeredClientRepository,
-                                         RegisteredClientMapper registeredClientMapper,
+                                         RegisteredClientConverter registeredClientConverter,
                                          OAuth2AuthorizationRepository oAuth2AuthorizationRepository,
                                          OAuth2AuthorizationMapper authorizationMapper) {
         this.oAuth2AuthorizationRepository = oAuth2AuthorizationRepository;
         this.authorizationMapper = authorizationMapper;
         this.registeredClientRepository = registeredClientRepository;
-        this.registeredClientMapper = registeredClientMapper;
+        this.registeredClientConverter = registeredClientConverter;
     }
 
     @Override
@@ -49,8 +50,11 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
 
     @Override
     public OAuth2Authorization findById(String id) {
-        return authorizationMapper.toAuthorization(oAuth2AuthorizationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource not found")), registeredClientMapper);
+        OAuth2AuthorizationEntity entity = oAuth2AuthorizationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+        RegisteredClientEntity registeredClientEntity = registeredClientRepository.findByClientId(entity.getRegisteredClient().getClientId())
+                .orElseThrow(() -> new RuntimeException("RegisteredClient not found"));
+        return authorizationMapper.toAuthorization(entity, registeredClientEntity, registeredClientConverter);
     }
 
     @Override
@@ -60,6 +64,7 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
                 "refresh_token", oAuth2AuthorizationRepository::findByRefreshToken,
                 "code", oAuth2AuthorizationRepository::findByAuthorizationCode
         );
+
         Optional<OAuth2AuthorizationEntity> entityOpt;
         if (tokenType == null) {
             entityOpt = tokenFinders.values().stream()
@@ -74,7 +79,12 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         }
 
         return entityOpt
-                .map(entity -> authorizationMapper.toAuthorization(entity, registeredClientMapper))
+                .map(entity -> {
+                    RegisteredClientEntity registeredClientEntity = registeredClientRepository
+                            .findByClientId(entity.getRegisteredClient().getClientId())
+                            .orElseThrow(() -> new RuntimeException("RegisteredClient not found"));
+                    return authorizationMapper.toAuthorization(entity, registeredClientEntity, registeredClientConverter);
+                })
                 .orElseThrow(() -> new RuntimeException("OAuth2Authorization not found for token: " + token));
     }
 

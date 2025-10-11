@@ -22,6 +22,9 @@ public class RegisteredClientEntity {
     @Column(nullable = false)
     private String clientSecret;
 
+    @Column(nullable = false)
+    private String clientName;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "registered_client_scopes", joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "scope")
@@ -41,6 +44,12 @@ public class RegisteredClientEntity {
     @CollectionTable(name = "registered_client_redirect_uris", joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "redirect_uri")
     private Set<String> redirectUris = new HashSet<>();
+
+    @Embedded
+    private TokenSettingsEmbeddable tokenSettings;
+
+    @Embedded
+    private ClientSettingsEmbeddable clientSettings;
 
     public String getId() {
         return id;
@@ -102,6 +111,33 @@ public class RegisteredClientEntity {
 
     public RegisteredClientEntity setRedirectUris(Set<String> redirectUris) {
         this.redirectUris = redirectUris;
+        return this;
+    }
+
+    public TokenSettingsEmbeddable getTokenSettings() {
+        return tokenSettings;
+    }
+
+    public RegisteredClientEntity setTokenSettings(TokenSettingsEmbeddable tokenSettings) {
+        this.tokenSettings = tokenSettings;
+        return this;
+    }
+
+    public ClientSettingsEmbeddable getClientSettings() {
+        return clientSettings;
+    }
+
+    public RegisteredClientEntity setClientSettings(ClientSettingsEmbeddable clientSettings) {
+        this.clientSettings = clientSettings;
+        return this;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public RegisteredClientEntity setClientName(String clientName) {
+        this.clientName = clientName;
         return this;
     }
 
