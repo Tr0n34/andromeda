@@ -1,5 +1,6 @@
 package fr.andromeda.auth.services.impl;
 
+import fr.andromeda.auth.dto.authentication.RegisteredClientDTO;
 import fr.andromeda.auth.entities.RegisteredClientEntity;
 import fr.andromeda.auth.mappers.RegisteredClientMapper;
 import fr.andromeda.auth.repositories.AuthRegisteredClientRepository;
@@ -20,18 +21,18 @@ public class RegisteredClientService {
         this.mapper = mapper;
     }
 
-    public RegisteredClient create(RegisteredClient client) {
+    public RegisteredClientDTO create(RegisteredClientDTO client) {
         RegisteredClientEntity entity = mapper.toEntity(client);
         repository.save(entity);
         return client;
     }
 
-    public Optional<RegisteredClient> findByClientId(String clientId) {
-        return repository.findByClientId(clientId).map(mapper::toRegisteredClient);
+    public Optional<RegisteredClientDTO> findByClientId(String clientId) {
+        return repository.findByClientId(clientId).map(mapper::toDto);
     }
 
-    public List<RegisteredClient> findAll() {
-        return repository.findAll().stream().map(mapper::toRegisteredClient).toList();
+    public List<RegisteredClientDTO> findAll() {
+        return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
 }

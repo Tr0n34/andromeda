@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.andromeda.api.dto.errors.ErrorDTO;
 import fr.andromeda.api.repositories.ErrorRepository;
 import fr.andromeda.api.services.interfaces.IErrorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

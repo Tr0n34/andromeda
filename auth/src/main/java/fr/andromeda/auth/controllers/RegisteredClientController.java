@@ -1,14 +1,14 @@
 package fr.andromeda.auth.controllers;
 
+import fr.andromeda.api.enums.UrlPattern;
+import fr.andromeda.auth.dto.authentication.RegisteredClientDTO;
 import fr.andromeda.auth.services.impl.RegisteredClientService;
-import fr.andromeda.auth.services.interfaces.IRegistredClientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("${api.prefix}/clients")
@@ -21,25 +21,22 @@ public class RegisteredClientController {
     }
 
     @PostMapping
-    public RegisteredClient createClient(@RequestBody RegisteredClient client) {
-        RegisteredClient clientWithId = RegisteredClient.withId(client.getId() != null ? client.getId() : UUID.randomUUID().toString())
-                .clientId(client.getClientId())
-                .clientSecret(client.getClientSecret())
-                .clientAuthenticationMethods(auth -> auth.addAll(client.getClientAuthenticationMethods()))
-                .authorizationGrantTypes(grants -> grants.addAll(client.getAuthorizationGrantTypes()))
-                .scopes(scopes -> scopes.addAll(client.getScopes()))
-                .redirectUris(uris -> uris.addAll(client.getRedirectUris()))
-                .build();
-        return registeredClientService.create(client);
+    public ResponseEntity<Void> createClient(@RequestBody RegisteredClientDTO clientDTO) {
+        RegisteredClientDTO saved = registeredClientService.create(clientDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path(UrlPattern.ID.getPath())
+                .buildAndExpand(saved.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/{clientId}")
-    public RegisteredClient getClient(@PathVariable String clientId) {
+    public RegisteredClientDTO getClient(@PathVariable String clientId) {
         return registeredClientService.findByClientId(clientId).orElseThrow(() -> new RuntimeException("Client not found"));
     }
 
     @GetMapping
-    public List<RegisteredClient> getAllClients() {
+    public List<RegisteredClientDTO> getAllClients() {
         return registeredClientService.findAll();
     }
 

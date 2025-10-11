@@ -22,23 +22,19 @@ import java.util.UUID;
 @Mapper(componentModel = "spring", uses = {RegisteredClientMapper.class})
 public abstract class OAuth2AuthorizationMapper {
 
-
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RegisteredClientConverter registeredClientConverter = new RegisteredClientConverter();
 
-
-    // ----------- Entity -> Domain -----------
-    public OAuth2Authorization toAuthorization(OAuth2AuthorizationEntity entity, RegisteredClientMapper registeredClientMapper) {
-// Convert RegisteredClientEntity -> RegisteredClient
-        RegisteredClient registeredClient = registeredClientMapper.toRegisteredClient(entity.getRegisteredClient());
-
+    public OAuth2Authorization toAuthorization(OAuth2AuthorizationEntity entity,
+                                               RegisteredClientEntity registeredClientEntity,
+                                               RegisteredClientConverter converter) {
+        RegisteredClient registeredClient = converter.toSpringRegisteredClient(registeredClientEntity);
 
         OAuth2Authorization.Builder builder = OAuth2Authorization.withRegisteredClient(registeredClient)
                 .id(entity.getId())
                 .principalName(entity.getPrincipalName())
                 .authorizationGrantType(new AuthorizationGrantType(entity.getAuthorizationGrantType()))
                 .authorizedScopes(entity.getAuthorizedScopes());
-
-
         if (entity.getAttributes() != null) {
             try {
                 Map<String, Object> attrs = objectMapper.readValue(entity.getAttributes(), Map.class);
@@ -47,8 +43,6 @@ public abstract class OAuth2AuthorizationMapper {
                 throw new RuntimeException("Erreur lors de la désérialisation des attributs OAuth2Authorization", e);
             }
         }
-
-
         for (OAuth2AuthorizationTokenEntity tokenEntity : entity.getTokens()) {
             switch (tokenEntity.getTokenType()) {
                 case "access_token" -> builder.token(new OAuth2AccessToken(
@@ -73,8 +67,6 @@ public abstract class OAuth2AuthorizationMapper {
         return builder.build();
     }
 
-
-    // ----------- Domain -> Entity -----------
     public OAuth2AuthorizationEntity toEntity(OAuth2Authorization authorization, RegisteredClientEntity registeredClientEntity) {
         OAuth2AuthorizationEntity entity = new OAuth2AuthorizationEntity();
         entity.setId(authorization.getId());
@@ -82,27 +74,18 @@ public abstract class OAuth2AuthorizationMapper {
         entity.setAuthorizationGrantType(authorization.getAuthorizationGrantType().getValue());
         entity.setAuthorizedScopes(authorization.getAuthorizedScopes());
         entity.setRegisteredClient(registeredClientEntity);
-
-
         try {
             entity.setAttributes(objectMapper.writeValueAsString(authorization.getAttributes()));
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Erreur lors de la sérialisation des attributs OAuth2Authorization", e);
         }
-
-
         Set<OAuth2AuthorizationTokenEntity> tokenEntities = new HashSet<>();
-
-
         addTokenEntity(tokenEntities, entity, "access_token", authorization.getAccessToken());
         addTokenEntity(tokenEntities, entity, "refresh_token", authorization.getRefreshToken());
         addTokenEntity(tokenEntities, entity, "code", authorization.getToken(OAuth2AuthorizationCode.class));
-
-
         entity.setTokens(tokenEntities);
         return entity;
     }
-
 
     private <T extends AbstractOAuth2Token> void addTokenEntity(Set<OAuth2AuthorizationTokenEntity> tokenEntities,
                                                                 OAuth2AuthorizationEntity parent,
@@ -110,8 +93,6 @@ public abstract class OAuth2AuthorizationMapper {
                                                                 OAuth2Authorization.Token<T> tokenWrapper) {
         if (tokenWrapper == null || tokenWrapper.getToken() == null) return;
         T token = tokenWrapper.getToken();
-
-
         OAuth2AuthorizationTokenEntity tokenEntity = new OAuth2AuthorizationTokenEntity();
         tokenEntity.setId(UUID.randomUUID().toString());
         tokenEntity.setAuthorization(parent);
@@ -119,13 +100,9 @@ public abstract class OAuth2AuthorizationMapper {
         tokenEntity.setTokenValue(token.getTokenValue());
         tokenEntity.setIssuedAt(token.getIssuedAt());
         tokenEntity.setExpiresAt(token.getExpiresAt());
-
-
         if (token instanceof OAuth2AccessToken at) {
             tokenEntity.setScopes(at.getScopes());
         }
-
-
         tokenEntities.add(tokenEntity);
     }
 }
