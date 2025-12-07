@@ -3,7 +3,6 @@ package fr.andromeda.sport.controllers;
 import fr.andromeda.sport.dto.AggregateTrainingDTO;
 import fr.andromeda.sport.dto.TrainingDTO;
 import fr.andromeda.sport.services.TrainingService;
-import io.micrometer.core.instrument.util.StringEscapeUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;

@@ -1,8 +1,7 @@
 package fr.andromeda.sport.mappers;
 
-import fr.andromeda.sport.entities.IEntity;
 import fr.andromeda.sport.dto.IDTO;
-import org.mapstruct.Mapper;
+import fr.andromeda.sport.entities.IEntity;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package fr.andromeda.sport.mappers;
 
-import fr.andromeda.sport.entities.TrainingEntity;
 import fr.andromeda.sport.dto.TrainingDTO;
+import fr.andromeda.sport.entities.TrainingEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

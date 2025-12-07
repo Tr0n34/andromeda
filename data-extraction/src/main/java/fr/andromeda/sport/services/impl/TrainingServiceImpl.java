@@ -2,13 +2,13 @@ package fr.andromeda.sport.services.impl;
 
 import fr.andromeda.sport.dto.AggregateTrainingDTO;
 import fr.andromeda.sport.dto.RowDataDTO;
+import fr.andromeda.sport.dto.TrainingDTO;
 import fr.andromeda.sport.dto.builders.TrainingDTOBuilder;
 import fr.andromeda.sport.entities.TrainingEntity;
 import fr.andromeda.sport.enums.TrainingStatus;
 import fr.andromeda.sport.exceptions.business.ResourceNotFoundException;
 import fr.andromeda.sport.mappers.RowDataMapper;
 import fr.andromeda.sport.mappers.TrainingMapper;
-import fr.andromeda.sport.dto.TrainingDTO;
 import fr.andromeda.sport.repositories.RowDataRepository;
 import fr.andromeda.sport.repositories.TrainingRepository;
 import fr.andromeda.sport.services.TrainingService;

@@ -2,6 +2,7 @@ package fr.andromeda.api.services.impl;
 
 import fr.andromeda.api.dto.errors.ErrorDTO;
 import fr.andromeda.api.entities.errors.Error;
+import fr.andromeda.api.errors.ErrorProvider;
 import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.api.mappers.ErrorMapper;
 import fr.andromeda.api.repositories.ErrorRepository;
@@ -17,8 +18,8 @@ import java.util.List;
 public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepository, Long> implements IErrorService {
 
     @Autowired
-    public ErrorService(ErrorMapper errorMapper, ErrorRepository errorRepository) {
-        super(errorMapper, errorRepository, Error.class.getSimpleName());
+    public ErrorService(ErrorMapper errorMapper, ErrorRepository errorRepository, ErrorProvider errorProvider) {
+        super(errorMapper, errorRepository, Error.class.getSimpleName(), errorProvider);
     }
 
     @Override
@@ -34,7 +35,10 @@ public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepo
 
     @Override
     public List<ErrorDTO> findAllByStatusAndEntityName(HttpStatus status, String entityName) throws ResourceNotFoundException {
-        List<Error> errors = getRepository().findAllByStatusAndEntityName(status, entityName).orElseThrow(() -> getErrorProvider().notFound(entityName));
+        List<Error> errors = getRepository().findAllByStatusAndEntityName(status, entityName);
+        if ( errors.isEmpty() ) {
+            throw getErrorProvider().notFound(Error.class.getSimpleName());
+        }
         return getMapper().toDtoList(errors);
     }
 

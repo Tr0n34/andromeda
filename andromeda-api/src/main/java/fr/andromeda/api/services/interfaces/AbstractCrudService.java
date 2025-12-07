@@ -7,6 +7,7 @@ import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.api.mappers.IMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +23,6 @@ public abstract class AbstractCrudService <D extends IDTO, E extends IEntity, R 
     protected final R repository;
     private final String entityName;
     private final ErrorProvider errorProvider;
-
-    public AbstractCrudService(IMapper<D, E> mapper, R repository, String entityName) {
-        this.entityName = entityName;
-        this.repository = repository;
-        this.mapper = mapper;
-        this.errorProvider = null;
-    }
 
     protected AbstractCrudService(IMapper<D, E> mapper, R repository, String entityName, ErrorProvider errorProvider) {
         this.mapper = mapper;

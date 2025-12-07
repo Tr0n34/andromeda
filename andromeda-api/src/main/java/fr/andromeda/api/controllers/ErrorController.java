@@ -51,7 +51,7 @@ public class ErrorController {
     }
 
     @GetMapping(Urls.PATH_ID)
-    public ResponseEntity<ErrorDTO> getError(@PathVariable Long id) {
+    public ResponseEntity<ErrorDTO> getError(@PathVariable("id") Long id) {
         return ResponseEntity.ok(errorService.get(id));
     }
 
@@ -66,6 +66,5 @@ public class ErrorController {
         errorService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }

@@ -17,6 +17,6 @@ public interface ErrorRepository extends JpaRepository<Error, Long> {
 
     List<Error> findAllByStatus(HttpStatus status);
 
-    Optional<List<Error>> findAllByStatusAndEntityName(HttpStatus status, String entityName);
+    List<Error> findAllByStatusAndEntityName(HttpStatus status, String entityName);
 
 }

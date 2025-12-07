@@ -19,6 +19,8 @@ import java.security.interfaces.RSAPublicKey;
 @Configuration
 public class JwtConfiguration {
 
+    public static final String KEYSTORE_TYPE = "JKS";
+
     private final JwtKeyStoreProperties props;
 
     public JwtConfiguration(JwtKeyStoreProperties props) {
@@ -27,7 +29,7 @@ public class JwtConfiguration {
 
     @Bean
     public RSAPublicKey publicKey() throws Exception {
-        KeyStore keyStore = KeyStore.getInstance("JKS");
+        KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
         keyStore.load(new ClassPathResource(props.getLocation()).getInputStream(),
                 props.getPassword().toCharArray());
         return (RSAPublicKey) keyStore.getCertificate(props.getKeyAlias()).getPublicKey();
@@ -35,7 +37,7 @@ public class JwtConfiguration {
 
     @Bean
     public RSAPrivateKey privateKey() throws Exception {
-        KeyStore keyStore = KeyStore.getInstance("JKS");
+        KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
         keyStore.load(new ClassPathResource(props.getLocation()).getInputStream(),
                 props.getPassword().toCharArray());
         return (RSAPrivateKey) keyStore.getKey(props.getKeyAlias(), props.getKeyPassword().toCharArray());

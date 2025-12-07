@@ -1,13 +1,12 @@
 {
-  "clientId": "cyb-manager-front-client",
-  "clientSecret": "{noop}secret",
+  "clientId": "cyb",
+  "clientSecret": "secret",
   "clientName": "CybManager Frontend",
   "clientAuthenticationMethods": [
-"none"
+    "client_secret_basic"
   ],
   "authorizationGrantTypes": [
-"authorization_code",
-"refresh_token"
+    "client_credentials"
   ],
   "redirectUris": [
     "http://localhost:8082/login/oauth2/code/cybmanager"
@@ -21,7 +20,7 @@
     "read"
   ],
   "clientSettings": {
-    "requireProofKey": true,
+    "requireProofKey": false,
     "requireAuthorizationConsent": false
   },
   "tokenSettings": {
@@ -37,12 +36,15 @@
   "clientSecret": "{bcrypt}$2a$10$abc...xyz",
   "clientName": "Internal Service",
   "clientAuthenticationMethods": [
-    { "value": "client_secret_basic" }
+    "client_secret_basic"
   ],
   "authorizationGrantTypes": [
-    { "value": "client_credentials" }
+    "client_credentials"
   ],
-  "scopes": ["read", "write"],
+  "scopes": [
+    "read",
+    "write"
+  ],
   "tokenSettings": {
     "accessTokenTimeToLive": "PT30M"
   }
