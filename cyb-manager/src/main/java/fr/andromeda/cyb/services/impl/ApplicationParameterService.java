@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.services.impl;
 
+import fr.andromeda.api.errors.ErrorProvider;
 import fr.andromeda.api.services.interfaces.AbstractCrudService;
 import fr.andromeda.cyb.dto.ApplicationParameterDTO;
 import fr.andromeda.cyb.entites.application.ApplicationParameter;
@@ -15,8 +16,9 @@ public class ApplicationParameterService extends AbstractCrudService<Application
 
     @Autowired
     public ApplicationParameterService(ApplicationParameterMapper mapper,
-                                       ApplicationConfigurationRepository repository) {
-        super(mapper, repository, ApplicationParameter.class.getSimpleName());
+                                       ApplicationConfigurationRepository repository,
+                                       ErrorProvider errorProvider) {
+        super(mapper, repository, ApplicationParameter.class.getSimpleName(), errorProvider);
     }
 
     @Override

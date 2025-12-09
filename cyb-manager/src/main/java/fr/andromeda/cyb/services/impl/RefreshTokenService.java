@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.services.impl;
 
+import fr.andromeda.api.errors.ErrorProvider;
 import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.api.services.interfaces.AbstractCrudService;
 import fr.andromeda.cyb.dto.UserDTO;
@@ -36,8 +37,9 @@ public class RefreshTokenService extends AbstractCrudService<RefreshTokenDTO, Re
                                RefreshTokenMapper refreshTokenMapper,
                                UserMapper userMapper,
                                JwtTokenService jwtTokenService,
-                               PasswordEncoder encoder) {
-        super(refreshTokenMapper, refreshTokenRepository, RefreshToken.class.getSimpleName());
+                               PasswordEncoder encoder,
+                               ErrorProvider errorProvider) {
+        super(refreshTokenMapper, refreshTokenRepository, RefreshToken.class.getSimpleName(), errorProvider);
         this.jwtTokenService = jwtTokenService;
         this.userMapper = userMapper;
         this.encoder = encoder;

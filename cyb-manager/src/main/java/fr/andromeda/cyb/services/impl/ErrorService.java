@@ -1,5 +1,6 @@
 package fr.andromeda.cyb.services.impl;
 
+import fr.andromeda.api.errors.ErrorProvider;
 import fr.andromeda.api.exceptions.ResourceNotFoundException;
 import fr.andromeda.api.services.interfaces.AbstractCrudService;
 import fr.andromeda.cyb.dto.errors.ErrorDTO;
@@ -17,8 +18,8 @@ import java.util.List;
 public class ErrorService extends AbstractCrudService<ErrorDTO, Error, ErrorRepository, Long> implements IErrorService {
 
     @Autowired
-    public ErrorService(ErrorMapper errorMapper, ErrorRepository errorRepository) {
-        super(errorMapper, errorRepository, Error.class.getSimpleName());
+    public ErrorService(ErrorMapper errorMapper, ErrorRepository errorRepository, ErrorProvider errorProvider) {
+        super(errorMapper, errorRepository, Error.class.getSimpleName(), errorProvider);
     }
 
     @Override
